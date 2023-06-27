@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "736987488793",
+    "firebase_url": "https://artisan2022-b24bd-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "artisan2022-b24bd",
+    "storage_bucket": "artisan2022-b24bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736987488793:android:008faebe6deef0b38ec088",
+        "android_client_info": {
+          "package_name": "com.example.mon_artisan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736987488793-7uk03b79mse762me190qulc7bd3bnv7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDybc-KJjVM69moGSAgSxNXuXWNQQkQv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736987488793-7uk03b79mse762me190qulc7bd3bnv7l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "736987488793-4ua1vdlbbie0pm13sloo96i260bnae1o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.monArtisanProject"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736987488793:android:d14a338d0dce3c268ec088",
+        "android_client_info": {
+          "package_name": "com.example.mon_artisan_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736987488793-7uk03b79mse762me190qulc7bd3bnv7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDybc-KJjVM69moGSAgSxNXuXWNQQkQv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736987488793-7uk03b79mse762me190qulc7bd3bnv7l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "736987488793-4ua1vdlbbie0pm13sloo96i260bnae1o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.monArtisanProject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>736987488793-g5te6clcs1vmo3t0vm2nlo7ebpvn6d7b.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.736987488793-g5te6clcs1vmo3t0vm2nlo7ebpvn6d7b</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCCObH5SQip7M360LP-FuR0yoT0qfR8ZB0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>736987488793</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.monArtisan</string>
+	<key>PROJECT_ID</key>
+	<string>artisan2022-b24bd</string>
+	<key>STORAGE_BUCKET</key>
+	<string>artisan2022-b24bd.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:736987488793:ios:b9ec84de46a913bc8ec088</string>
+	<key>DATABASE_URL</key>
+	<string>https://artisan2022-b24bd-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
