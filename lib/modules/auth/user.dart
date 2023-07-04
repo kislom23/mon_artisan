@@ -3,5 +3,7 @@ class User {
   String prenom;
   String email;
   String password;
-  User(this.nom, this.prenom, this.email, this.password);
+  String offreService;
+
+  User(this.nom, this.prenom, this.email, this.password, this.offreService);
 }

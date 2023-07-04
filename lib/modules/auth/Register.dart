@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, use_key_in_widget_constructors, file_names
+// ignore_for_file: use_build_context_synchronously, use_key_in_widget_constructors, file_names, avoid_print
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -18,13 +18,49 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  User user = User("", "", "", "");
-  // text editing controllers
+  List<dynamic> data = [];
+  List<DropdownMenuItem<String>> dropdownItems = [];
+  String offreService = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+
+    if (data.isNotEmpty) {
+      offreService = data[0]['nomDuService'];
+    }
+  }
+
+  Future<void> fetchData() async {
+    final url = Uri.parse('http://10.0.2.2:9000/api/v1/of/offreServices');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      List<dynamic> responseData = json.decode(response.body);
+
+      setState(() {
+        data = responseData;
+
+        dropdownItems = data.map<DropdownMenuItem<String>>((dynamic item) {
+          final Map<String, dynamic> offreService =
+              item as Map<String, dynamic>;
+          return DropdownMenuItem<String>(
+            value: offreService['nomDuService'] as String,
+            child: Text(offreService['nomDuService'] as String),
+          );
+        }).toList();
+      });
+    } else {
+      print("Erreur: ${response.statusCode}");
+    }
+  }
+
+  User user = User("", "", "", "", "");
   final nomController = TextEditingController();
   final prenomController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   Uri url = Uri.parse('http://10.0.2.2:9000/api/v1/auth/artisan/ajout');
 
   Future registerUser() async {
@@ -32,8 +68,8 @@ class _RegisterPageState extends State<RegisterPage> {
     user.password = passwordController.text;
     user.prenom = prenomController.text;
     user.email = emailController.text;
+    user.offreService = offreService;
 
-    // Vérifier si tous les champs sont remplis
     if (user.nom.isEmpty ||
         user.prenom.isEmpty ||
         user.email.isEmpty ||
@@ -54,6 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'prenom': user.prenom,
         'email': user.email,
         'mot_de_passe': user.password,
+        'offreService': {'nomDuService': offreService}
       }),
     );
 
@@ -69,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
           fontSize: 16,
         );
       }
-      // Enregistrez le token dans les préférences de l'appareil
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (token != null) {
         await prefs.setString('token', token);
@@ -94,15 +131,11 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // logo
                 const Image(
                   image: AssetImage('assets/images/LOGO-01.png'),
                   height: 200,
                 ),
-
                 const SizedBox(height: 10),
-
-                // welcome back, you've been missed!
                 const Text(
                   'Bienvenue, inscrivez-vous ',
                   style: TextStyle(
@@ -111,10 +144,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     fontSize: 16,
                   ),
                 ),
-
                 const SizedBox(height: 15),
-
-                // username textfield
                 MyTextField(
                   controller: nomController,
                   hintText: 'Nom',
@@ -123,9 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     user.nom = value;
                   },
                 ),
-
                 const SizedBox(height: 10),
-
                 MyTextField(
                   controller: prenomController,
                   hintText: 'Prénom',
@@ -134,9 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     user.prenom = value;
                   },
                 ),
-
                 const SizedBox(height: 10),
-                // password textfield
                 MyTextField(
                   controller: emailController,
                   hintText: 'Email',
@@ -145,9 +171,33 @@ class _RegisterPageState extends State<RegisterPage> {
                     user.email = value;
                   },
                 ),
-
                 const SizedBox(height: 10),
-
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 26),
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 1),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: DropdownButton<String>(
+                      focusColor: Colors.grey,
+                      isExpanded: true,
+                      value: offreService.isNotEmpty ? offreService : null,
+                      onChanged: (newValue) {
+                        setState(() {
+                          offreService = newValue!;
+                          print(offreService);
+                        });
+                      },
+                      items: dropdownItems.isNotEmpty ? dropdownItems : null,
+                      hint: dropdownItems.isNotEmpty
+                          ? const Text('Sélectionnez un service')
+                          : const Text('Aucun service disponible'),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
                 MyTextField(
                   controller: passwordController,
                   hintText: 'Mot de passe',
@@ -156,16 +206,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     user.password = value;
                   },
                 ),
-
                 const SizedBox(height: 25),
-
-                // sign in button
                 MyButton2(
                   onTap: registerUser,
                 ),
-
                 const SizedBox(height: 20),
-                // not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -192,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

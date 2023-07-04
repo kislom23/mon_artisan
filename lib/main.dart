@@ -49,9 +49,9 @@ class _MyAppState extends State<MyApp> {
       home: FutureBuilder<bool>(
         future: _isLoggedIn,
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
-              color: Colors.white, // You can customize this
+              color: Colors.white, 
               child: const Center(
                 child: CircularProgressIndicator(),
               ),

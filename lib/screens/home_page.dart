@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 80),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 80),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(27.0),
           child: GNav(

@@ -85,8 +85,6 @@ class _HomeState extends State<Home> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: imagesList.asMap().entries.map((entry) {
-                  // ignore: avoid_print
-                  print(entry.key);
                   return GestureDetector(
                     onTap: () => carouselController.animateToPage(entry.key),
                     child: Container(

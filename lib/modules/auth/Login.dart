@@ -20,7 +20,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  User user = User("", "", "", "");
+  User user = User("", "", "", "","");
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
