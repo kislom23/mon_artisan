@@ -25,13 +25,26 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  Uri url = Uri.parse('http://10.0.2.2:9000/api/v1/auth/register');
+  Uri url = Uri.parse('http://10.0.2.2:9000/api/v1/auth/artisan/ajout');
 
   Future registerUser() async {
     user.nom = nomController.text;
     user.password = passwordController.text;
     user.prenom = prenomController.text;
     user.email = emailController.text;
+
+    // Vérifier si tous les champs sont remplis
+    if (user.nom.isEmpty ||
+        user.prenom.isEmpty ||
+        user.email.isEmpty ||
+        user.password.isEmpty) {
+      Fluttertoast.showToast(
+        msg: "Veuillez remplir tous les champs",
+        gravity: ToastGravity.BOTTOM,
+        fontSize: 16,
+      );
+      return;
+    }
 
     var res = await http.post(
       url,
@@ -41,7 +54,6 @@ class _RegisterPageState extends State<RegisterPage> {
         'prenom': user.prenom,
         'email': user.email,
         'mot_de_passe': user.password,
-        'role': 'ARTISAN',
       }),
     );
 
@@ -64,6 +76,12 @@ class _RegisterPageState extends State<RegisterPage> {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
             arguments: user.email);
       }
+    } else {
+      Fluttertoast.showToast(
+        msg: "Une erreur s'est produite lors de l'inscription",
+        gravity: ToastGravity.BOTTOM,
+        fontSize: 16,
+      );
     }
   }
 
