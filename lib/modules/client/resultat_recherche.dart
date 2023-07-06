@@ -1,9 +1,12 @@
+// ignore_for_file: avoid_unnecessary_containers, avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
 import 'package:http/http.dart' as http;
+import 'package:mon_artisan/modules/client/artisanDetailsPage.dart';
 
 class ResultatPage extends StatefulWidget {
   final String searchTerm;
@@ -106,14 +109,31 @@ class _ResultatPageState extends State<ResultatPage> {
                 color: Colors.black,
               ),
             ),
-            trailing: Container(
-              child: IconButton(
-                icon: const Icon(
+            trailing: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => DetailsPage(
+                          nom: artisanName,
+                          prenom: artisanPrenom,
+                          email: artisan['email'],
+                          numTelephone: artisan['num_telephone'],
+                          nomDuService: filteredServices[index]['nomDuService'],
+                          categorie: filteredServices[index]
+                              ['categorie_De_Service']['categorieService'],
+                          description: filteredServices[index]
+                              ['description_du_service'],
+                        )),
+                  ),
+                );
+              },
+              child: Container(
+                child: const Icon(
                   Icons.arrow_right,
                   size: 30,
                   color: Colors.black,
                 ),
-                onPressed: () {},
               ),
             ),
           );
