@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class DashbordPage extends StatefulWidget {
   const DashbordPage({Key? key}) : super(key: key);
@@ -17,6 +17,46 @@ class _DashbordPageState extends State<DashbordPage> {
     // ignore: prefer_const_constructors
     return Scaffold(
       appBar: const AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Ici,',
+              style: GoogleFonts.poppins(
+                  fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Vous trouverez les statistiques en rapport à votre profil, vos offres de services, et vos prestations de services.',
+              style: GoogleFonts.poppins(
+                fontSize: 15,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Vous y trouverez aussi vos meilleurs commentaires et notes de prestattions de services',
+              style: GoogleFonts.poppins(
+                fontSize: 15,
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              'Au plaisir de vous revoir, je dis bonsoir et heureux de vous comptee parmi nos artisans 😉',
+              style: GoogleFonts.poppins(
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -70,7 +110,7 @@ class AppBar extends StatelessWidget implements PreferredSizeWidget {
             padding: const EdgeInsets.only(left: 3, bottom: 15),
             // ignore: prefer_const_constructors
             child: Text(
-              "Dashbord",
+              "Bienvenue",
               // ignore: prefer_const_constructors
               style: TextStyle(
                 fontSize: 25,
