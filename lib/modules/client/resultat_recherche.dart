@@ -118,7 +118,7 @@ class _ResultatPageState extends State<ResultatPage> {
                           nom: artisanName,
                           prenom: artisanPrenom,
                           email: artisan['email'],
-                          numTelephone: artisan['num_telephone'],
+                          numTelephone: artisan['num_telephone'].toString(),
                           nomDuService: filteredServices[index]['nomDuService'],
                           categorie: filteredServices[index]
                               ['categorie_De_Service']['categorieService'],
