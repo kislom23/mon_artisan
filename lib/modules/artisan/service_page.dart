@@ -1,10 +1,9 @@
-// ignore_for_file: file_names, avoid_print, sized_box_for_whitespace, avoid_unnecessary_containers
+// ignore_for_file: file_names, avoid_print, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_interpolation_to_compose_strings, use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mon_artisan/modules/artisan/Service/service_formulaire.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,14 +16,33 @@ class ServicePage extends StatefulWidget {
 
 class _ServicePageState extends State<ServicePage> {
   List<dynamic> data = [];
+
+  List<dynamic> offreServices = [];
+
   String authToken = "";
 
   @override
   void initState() {
     super.initState();
     loadAuthToken().then((_) {
+      offreServiceList();
       fetchData();
     });
+  }
+
+  Future<void> offreServiceList() async {
+    final url = Uri.parse('http://10.0.2.2:9000/api/v1/of/offreServices');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      List<dynamic> responseData = json.decode(response.body);
+
+      setState(() {
+        offreServices = responseData;
+      });
+    } else {
+      print("Erreur: ${response.statusCode}");
+    }
   }
 
   Future<void> loadAuthToken() async {
@@ -32,7 +50,6 @@ class _ServicePageState extends State<ServicePage> {
     String? token = prefs.getString('token');
     setState(() {
       authToken = token ?? '';
-      print(authToken);
     });
   }
 
@@ -51,10 +68,99 @@ class _ServicePageState extends State<ServicePage> {
 
       setState(() {
         data = responseData;
-        print(data);
       });
+
+      setState(() {});
     } else {
       print("Erreur: ${response.statusCode}");
+    }
+  }
+
+  String userOffreService = "";
+
+  void _addService() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text('Ajouter un service',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            titlePadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            children: offreServices.map((offreService) {
+              return SimpleDialogOption(
+                onPressed: () async {
+                  setState(() {
+                    userOffreService = offreService['nomDuService'].toString();
+                    
+                  });
+                  await addUserService();
+                  await fetchData();
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  offreService['nomDuService'].toString(),
+                  style: const TextStyle(fontSize: 16),
+                ),
+              );
+            }).toList(),
+          );
+        });
+  }
+
+  Future addUserService() async {
+    final url2 =
+        Uri.parse('http://10.0.2.2:9000/api/v1/auth/ajout/offre-service');
+
+    var res = await http.post(
+      url2,
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer $authToken',
+      },
+      body: json.encode({'nomDuService': userOffreService}),
+    );
+
+    if (res.statusCode == 200) {
+      print("Success");
+    } else {
+      Fluttertoast.showToast(
+        msg: "Une erreur s'est produite lors de l'ajout du service",
+        gravity: ToastGravity.BOTTOM,
+        fontSize: 16,
+      );
+    }
+  }
+
+  Future deleteUserService(String userServiceName) async {
+    final urlDel =
+        Uri.parse('http://10.0.2.2:9000/api/v1/auth/$userServiceName/artisan');
+
+    var res = await http.delete(
+      urlDel,
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer $authToken',
+      },
+    );
+    if (res.statusCode == 200) {
+      fetchData();
+      Fluttertoast.showToast(
+        msg: "Service supprimé avec succès",
+        gravity: ToastGravity.BOTTOM,
+        fontSize: 16,
+      );
+    } else {
+      print(res.statusCode);
+      Fluttertoast.showToast(
+        msg: "Une erreur s'est produite lors de la suppression du service",
+        gravity: ToastGravity.BOTTOM,
+        fontSize: 16,
+      );
     }
   }
 
@@ -110,15 +216,18 @@ class _ServicePageState extends State<ServicePage> {
                             child: Text(
                               "Service",
                               style: GoogleFonts.poppins(
-                                  fontSize: 36,
+                                  fontSize: 25,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
                           ),
-                          const Icon(
-                            Icons.business_center,
-                            size: 36,
-                          ),
+                          InkWell(
+                            onTap: _addService,
+                            child: const Icon(
+                              Icons.add,
+                              size: 35,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -135,12 +244,16 @@ class _ServicePageState extends State<ServicePage> {
                         itemBuilder: (context, index) {
                           final service = data[index];
                           final serviceName = service['nomDuService'];
+                          final serviceCategorie =
+                              service['categorie_De_Service']
+                                  ['categorieService'];
                           final serviceDescription =
                               service['description_du_service'];
 
                           return ListTile(
                             leading: const CircleAvatar(
-                                child: Icon(Icons.business_center_outlined)),
+                                child: Icon(Icons.business_center_outlined,
+                                    size: 30)),
                             title: Text(
                               serviceName,
                               style: GoogleFonts.poppins(
@@ -149,14 +262,23 @@ class _ServicePageState extends State<ServicePage> {
                                   color: Colors.black),
                             ),
                             subtitle: Text(
-                              serviceDescription,
+                              'Catégorie : ' +
+                                  serviceCategorie +
+                                  '\n' +
+                                  serviceDescription,
                               style: GoogleFonts.poppins(
                                   fontSize: 10, color: Colors.black),
                             ),
                             trailing: Container(
-                              child: const IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: null,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.delete,
+                                  size: 30,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  deleteUserService(serviceName);
+                                },
                               ),
                             ),
                           );

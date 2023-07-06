@@ -536,7 +536,7 @@ class _AppBarState extends State<AppBar> {
                 itemBuilder: (BuildContext context) => [
                   const PopupMenuItem(
                     value: _MenuValue.devenirartisan,
-                    child: Text('Devenir artisan'),
+                    child: Text('Se connecter'),
                   ),
                   const PopupMenuItem(
                       value: _MenuValue.contacter,
