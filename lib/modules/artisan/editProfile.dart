@@ -38,7 +38,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _telephoneController = TextEditingController();
 
-  Uri url = Uri.parse('http://10.0.2.2:9000/api/v1/art/artisan/modifier');
+  final url = Uri.parse('http://10.0.2.2:9000/api/v1/auth/artisan/modifier');
 
   Future<void> _submitForm() async {
     // Récupérer les valeurs saisies dans les variables
@@ -47,7 +47,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String email = _emailController.text;
     String telephone = _telephoneController.text;
 
-    var res = await http.post(
+    var res = await http.put(
       url,
       headers: {
         'content-type': 'application/json',
@@ -74,6 +74,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         gravity: ToastGravity.BOTTOM,
         fontSize: 16,
       );
+      print(res.statusCode);
     }
   }
 
@@ -138,7 +139,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const SizedBox(
                 height: 10,
               ),
-            const SizedBox(height: 30.0),
+              const SizedBox(height: 30.0),
               Container(
                 width: 250,
                 height: 40,

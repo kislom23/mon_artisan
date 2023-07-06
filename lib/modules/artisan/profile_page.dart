@@ -33,7 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
     String url = 'http://10.0.2.2:9000/api/v1/auth/logout';
 
     try {
-      http.Response response = await http.post(Uri.parse(url));
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: {'Authorization': 'Bearer $authToken'},
+      );
 
       if (response.statusCode == 200) {
         SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -49,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
           gravity: ToastGravity.BOTTOM,
           fontSize: 16,
         );
+        print(response.statusCode);
       }
     } catch (error) {
       Fluttertoast.showToast(
