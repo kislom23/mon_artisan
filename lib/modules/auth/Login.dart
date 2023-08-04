@@ -20,7 +20,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  User user = User("", "", "", "","");
+  User user = User("", "", "", "", "");
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -57,7 +57,8 @@ class _LoginPageState extends State<LoginPage> {
         gravity: ToastGravity.BOTTOM,
         fontSize: 16,
       );
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false, arguments: user.email);
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false,
+          arguments: user.email);
     } else {
       Fluttertoast.showToast(
         msg: "E-mail ou mot de passe incorrect",
@@ -90,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Poppins',
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
 
@@ -157,7 +158,10 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           'Ou continuer avec',
-                          style: TextStyle(color: Colors.grey[700]),
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontFamily: 'poppins',
+                          ),
                         ),
                       ),
                       Expanded(
@@ -193,7 +197,10 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const Text(
                       'Vous n\'avez pas de compte',
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: 'poppins',
+                      ),
                     ),
                     const SizedBox(width: 4),
                     InkWell(
@@ -206,6 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text(
                         'Créer en-un',
                         style: TextStyle(
+                          fontFamily: 'poppins',
                           color: Colors.orange,
                           fontWeight: FontWeight.bold,
                         ),

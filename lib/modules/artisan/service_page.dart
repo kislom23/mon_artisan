@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -79,37 +80,47 @@ class _ServicePageState extends State<ServicePage> {
   String userOffreService = "";
 
   void _addService() {
+    offreServices.sort((a, b) =>
+        a['nomDuService'].toString().compareTo(b['nomDuService'].toString()));
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: const Text('Ajouter un service',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            titlePadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            children: offreServices.map((offreService) {
-              return SimpleDialogOption(
-                onPressed: () async {
-                  setState(() {
-                    userOffreService = offreService['nomDuService'].toString();
-                    
-                  });
-                  await addUserService();
-                  await fetchData();
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  offreService['nomDuService'].toString(),
-                  style: const TextStyle(fontSize: 16),
-                ),
-              );
-            }).toList(),
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return Align(
+          alignment: Alignment.center,
+          child: Container(
+            width: 450,
+            height: 300, // Ajustez la largeur selon vos besoins
+            child: SimpleDialog(
+              title: const Text('Ajouter un service',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              titlePadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              children: offreServices.map((offreService) {
+                return SimpleDialogOption(
+                  onPressed: () async {
+                    setState(() {
+                      userOffreService =
+                          offreService['nomDuService'].toString();
+                    });
+                    await addUserService();
+                    await fetchData();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    offreService['nomDuService'].toString(),
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future addUserService() async {
@@ -188,7 +199,7 @@ class _ServicePageState extends State<ServicePage> {
                 height: MediaQuery.of(context).size.height * .6,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   border: const Border(
                     bottom: BorderSide(
                       style: BorderStyle.none,
@@ -252,8 +263,8 @@ class _ServicePageState extends State<ServicePage> {
 
                           return ListTile(
                             leading: const CircleAvatar(
-                                child: Icon(Icons.business_center_outlined,
-                                    size: 30)),
+                                child:
+                                    Icon(LineAwesomeIcons.briefcase, size: 30)),
                             title: Text(
                               serviceName,
                               style: GoogleFonts.poppins(

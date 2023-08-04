@@ -20,6 +20,7 @@ class MyButton2 extends StatelessWidget {
           child: Text(
             "S'inscrire",
             style: TextStyle(
+              fontFamily: 'poppins',
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,

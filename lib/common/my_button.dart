@@ -20,6 +20,7 @@ class MyButton extends StatelessWidget {
           child: Text(
             "Se connecter",
             style: TextStyle(
+              fontFamily: 'poppins',
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,

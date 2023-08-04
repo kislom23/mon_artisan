@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mon_artisan/common/my_button2.dart';
 import 'package:mon_artisan/common/my_textfield.dart';
 import 'package:mon_artisan/modules/auth/Login.dart';
@@ -41,15 +42,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
       setState(() {
         data = responseData;
+        print(data);
 
         dropdownItems = data.map<DropdownMenuItem<String>>((dynamic item) {
           final Map<String, dynamic> offreService =
               item as Map<String, dynamic>;
           return DropdownMenuItem<String>(
             value: offreService['nomDuService'] as String,
-            child: Text(offreService['nomDuService'] as String),
+            child: Text(offreService['nomDuService'] as String,
+                style: GoogleFonts.poppins(fontSize: 12)),
           );
         }).toList();
+
+        // Tri des éléments par ordre alphabétique
+        dropdownItems.sort((a, b) => a.value!.compareTo(b.value!));
       });
     } else {
       print("Erreur: ${response.statusCode}");
@@ -180,21 +186,26 @@ class _RegisterPageState extends State<RegisterPage> {
                       border: Border.all(color: Colors.grey, width: 1),
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: DropdownButton<String>(
-                      focusColor: Colors.grey,
-                      isExpanded: true,
-                      value: offreService.isNotEmpty ? offreService : null,
-                      onChanged: (newValue) {
-                        setState(() {
-                          offreService = newValue!;
-                          print(offreService);
-                        });
-                      },
-                      items: dropdownItems.isNotEmpty ? dropdownItems : null,
-                      hint: dropdownItems.isNotEmpty
-                          ? const Text('Sélectionnez un service')
-                          : const Text('Aucun service disponible'),
-                    ),
+                    child: ListView(shrinkWrap: true, children: [
+                      DropdownButton<String>(
+                        menuMaxHeight: 300,
+                        focusColor: Colors.grey,
+                        isExpanded: true,
+                        value: offreService.isNotEmpty ? offreService : null,
+                        onChanged: (newValue) {
+                          setState(() {
+                            offreService = newValue!;
+                            print(offreService);
+                          });
+                        },
+                        items: dropdownItems.isNotEmpty ? dropdownItems : null,
+                        hint: dropdownItems.isNotEmpty
+                            ? const Text('Sélectionnez un service',
+                                style: TextStyle(
+                                    fontFamily: 'poppins', fontSize: 12))
+                            : const Text('Aucun service disponible'),
+                      ),
+                    ]),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -216,7 +227,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     const Text(
                       'Vous êtes des nôtres ?',
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: 'poppins',
+                      ),
                     ),
                     const SizedBox(width: 4),
                     InkWell(
@@ -231,6 +245,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: const Text(
                         'Connectez-vous',
                         style: TextStyle(
+                          fontFamily: 'poppins',
                           color: Colors.orange,
                           fontWeight: FontWeight.bold,
                         ),
