@@ -7,8 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
 import 'package:http/http.dart' as http;
-import 'package:mon_artisan/main.dart';
-import 'package:mon_artisan/modules/artisan/editProfile.dart';
+import 'package:nye_dowola/main.dart';
+import 'package:nye_dowola/modules/artisan/editProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {

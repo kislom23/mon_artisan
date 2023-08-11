@@ -4,8 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:mon_artisan/modules/auth/Register.dart';
-import 'package:mon_artisan/modules/client/resultat_recherche.dart';
+import 'package:nye_dowola/modules/auth/Register.dart';
+import 'package:nye_dowola/modules/client/resultat_recherche.dart';
 
 import '../modules/auth/Login.dart';
 

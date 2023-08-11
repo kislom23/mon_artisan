@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
 import 'package:http/http.dart' as http;
-import 'package:mon_artisan/modules/client/artisanDetailsPage.dart';
+import 'package:nye_dowola/modules/client/artisanDetailsPage.dart';
 
 class ResultatPage extends StatefulWidget {
   final String searchTerm;
@@ -49,6 +49,7 @@ class _ResultatPageState extends State<ResultatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey.shade400,
         leading: IconButton(
           icon: const Icon(LineAwesomeIcons.arrow_left),
           color: Colors.white,
@@ -57,87 +58,105 @@ class _ResultatPageState extends State<ResultatPage> {
         title: Text(
           searchTerm,
           style: GoogleFonts.poppins(
+            fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          final artisan = data[index];
-          final artisanName = artisan['nom'];
-          final artisanPrenom = artisan['prenom'];
-          final artisanServices = artisan['offreServices'];
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: data.isEmpty
+            ? Center(
+                child: Text(
+                  'Aucun Résultat',
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            : ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  final artisan = data[index];
+                  final artisanName = artisan['nom'];
+                  final artisanPrenom = artisan['prenom'];
+                  final artisanServices = artisan['offreServices'];
 
-          final filteredServices = artisanServices
-              .where((service) =>
-                  service != null &&
-                  service is Map &&
-                  service['nomDuService'] != null &&
-                  service['nomDuService']
-                      .toString()
-                      .toLowerCase()
-                      .contains(searchTerm.toLowerCase()))
-              .toList();
+                  final filteredServices = artisanServices
+                      .where((service) =>
+                          service != null &&
+                          service is Map &&
+                          service['nomDuService'] != null &&
+                          service['nomDuService']
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchTerm.toLowerCase()))
+                      .toList();
 
-          return ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.person, size: 30)),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var service in filteredServices)
-                  if (service is Map &&
-                      service['nomDuService'] != null &&
-                      service['nomDuService']
-                          .toString()
-                          .toLowerCase()
-                          .contains(searchTerm.toLowerCase()))
-                    Text(
-                      service['nomDuService'].toString(),
+                  return ListTile(
+                    leading:
+                        const CircleAvatar(child: Icon(Icons.person, size: 30)),
+                    title: Text(
+                      '$artisanName $artisanPrenom',
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
-              ],
-            ),
-            subtitle: Text(
-              '$artisanName $artisanPrenom',
-              style: GoogleFonts.poppins(
-                fontSize: 10,
-                color: Colors.black,
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var service in filteredServices)
+                          if (service is Map &&
+                              service['nomDuService'] != null &&
+                              service['nomDuService']
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchTerm.toLowerCase()))
+                            Text(
+                              service['nomDuService'].toString(),
+                              style: GoogleFonts.poppins(
+                                fontSize: 10,
+                              ),
+                            ),
+                      ],
+                    ),
+                    trailing: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((context) => DetailsPage(
+                                  nom: artisanName,
+                                  prenom: artisanPrenom,
+                                  email: artisan['email'],
+                                  numTelephone:
+                                      artisan['num_telephone'].toString(),
+                                  nomDuService: filteredServices[index]
+                                      ['nomDuService'],
+                                  categorie: filteredServices[index]
+                                          ['categorie_De_Service']
+                                      ['categorieService'],
+                                  description: filteredServices[index]
+                                      ['description_du_service'],
+                                )),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        child: const Icon(
+                          Icons.arrow_right,
+                          size: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-            trailing: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => DetailsPage(
-                          nom: artisanName,
-                          prenom: artisanPrenom,
-                          email: artisan['email'],
-                          numTelephone: artisan['num_telephone'].toString(),
-                          nomDuService: filteredServices[index]['nomDuService'],
-                          categorie: filteredServices[index]
-                              ['categorie_De_Service']['categorieService'],
-                          description: filteredServices[index]
-                              ['description_du_service'],
-                        )),
-                  ),
-                );
-              },
-              child: Container(
-                child: const Icon(
-                  Icons.arrow_right,
-                  size: 30,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          );
-        },
       ),
     );
   }

@@ -4,11 +4,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mon_artisan/common/my_button.dart';
-import 'package:mon_artisan/common/my_textfield.dart';
-import 'package:mon_artisan/common/square_tile.dart';
-import 'package:mon_artisan/modules/auth/Register.dart';
-import 'package:mon_artisan/modules/auth/user.dart';
+import 'package:nye_dowola/common/my_button.dart';
+import 'package:nye_dowola/common/my_textfield.dart';
+import 'package:nye_dowola/common/square_tile.dart';
+import 'package:nye_dowola/modules/auth/Register.dart';
+import 'package:nye_dowola/modules/auth/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

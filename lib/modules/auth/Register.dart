@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mon_artisan/common/my_button2.dart';
-import 'package:mon_artisan/common/my_textfield.dart';
-import 'package:mon_artisan/modules/auth/Login.dart';
-import 'package:mon_artisan/modules/auth/user.dart';
+import 'package:nye_dowola/common/my_button2.dart';
+import 'package:nye_dowola/common/my_textfield.dart';
+import 'package:nye_dowola/modules/auth/Login.dart';
+import 'package:nye_dowola/modules/auth/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -141,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   image: AssetImage('assets/images/LOGO-01.png'),
                   height: 200,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 const Text(
                   'Bienvenue, inscrivez-vous ',
                   style: TextStyle(

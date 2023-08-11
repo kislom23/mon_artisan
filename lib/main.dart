@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mon_artisan/modules/auth/Login.dart';
-import 'package:mon_artisan/screens/home_page.dart';
-import 'package:mon_artisan/screens/home.dart';
+import 'package:nye_dowola/modules/auth/Login.dart';
+import 'package:nye_dowola/screens/home_page.dart';
+import 'package:nye_dowola/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

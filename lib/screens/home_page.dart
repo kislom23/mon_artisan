@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mon_artisan/modules/artisan/Dashbord.dart';
-import 'package:mon_artisan/modules/artisan/profile_page.dart';
+import 'package:nye_dowola/modules/artisan/Dashbord.dart';
+import 'package:nye_dowola/modules/artisan/profile_page.dart';
 
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:mon_artisan/modules/artisan/service_page.dart';
+import 'package:nye_dowola/modules/artisan/service_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
