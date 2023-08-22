@@ -40,6 +40,7 @@ class _ResultatPageState extends State<ResultatPage> {
 
       setState(() {
         data = responseData;
+        print(data);
       });
     } else {
       print("Erreur: ${response.statusCode}");
@@ -105,98 +106,96 @@ class _ResultatPageState extends State<ResultatPage> {
               },
             ),
           ),
-          SingleChildScrollView(
-            child: Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: data.isEmpty
-                    ? Center(
-                        child: Text(
-                          'Aucun Résultat',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: data.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Aucun Résultat',
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
-                      )
-                    : ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final artisan = data[index];
-                          final artisanName = artisan['nom'];
-                          final artisanPrenom = artisan['prenom'];
-                          final artisanServices = artisan['offreServices'];
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final artisan = data[index];
+                        final artisanName = artisan['nom'];
+                        final artisanPrenom = artisan['prenom'];
+                        final artisanServices = artisan['offreServices'];
 
-                          for (var service in artisanServices) {
-                            if (service != null &&
-                                service is Map &&
-                                service['nomDuService'] != null &&
-                                service['nomDuService']
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(searchTerm.toLowerCase())) {
-                              final serviceName =
-                                  service['nomDuService'].toString();
+                        for (var service in artisanServices) {
+                          if (service != null &&
+                              service is Map &&
+                              service['nomDuService'] != null &&
+                              service['nomDuService']
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchTerm.toLowerCase())) {
+                            final serviceName =
+                                service['nomDuService'].toString();
 
-                              return Card(
-                                color: Colors.white,
-                                elevation: 1.0,
-                                child: ListTile(
-                                  leading: const CircleAvatar(
-                                      child: Icon(Icons.person, size: 30)),
-                                  title: Text(
-                                    '$artisanName $artisanPrenom',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    serviceName,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                  trailing: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: ((context) => DetailsPage(
-                                                nom: artisanName,
-                                                prenom: artisanPrenom,
-                                                email: artisan['email'],
-                                                numTelephone:
-                                                    artisan['num_telephone']
-                                                        .toString(),
-                                                nomDuService:
-                                                    service['nomDuService'],
-                                                categorie: service[
-                                                        'categorie_De_Service']
-                                                    ['categorieService'],
-                                                description: service[
-                                                    'description_du_service'],
-                                              )),
-                                        ),
-                                      );
-                                    },
-                                    child: const Icon(
-                                      Icons.arrow_right,
-                                      size: 30,
-                                      color: Colors.black,
-                                    ),
+                            return Card(
+                              color: Colors.white,
+                              elevation: 1.0,
+                              child: ListTile(
+                                leading: const CircleAvatar(
+                                    child: Icon(Icons.person, size: 30)),
+                                title: Text(
+                                  '$artisanName $artisanPrenom',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              );
-                            }
+                                subtitle: Text(
+                                  serviceName,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                trailing: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: ((context) => DetailsPage(
+                                              nom: artisanName,
+                                              prenom: artisanPrenom,
+                                              email: artisan['email'],
+                                              numTelephone:
+                                                  artisan['num_telephone']
+                                                      .toString(),
+                                              nomDuService:
+                                                  service['nomDuService'],
+                                              categorie: service[
+                                                      'categorie_De_Service']
+                                                  ['categorieService'],
+                                              description: service[
+                                                  'description_du_service'],
+                                            )),
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.arrow_right,
+                                    size: 30,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            );
                           }
-                          // Si aucun service ne correspond à la recherche pour cet artisan, on retourne un widget vide
-                          return const SizedBox.shrink();
-                        },
-                      ),
-              ),
+                        }
+                        // Si aucun service ne correspond à la recherche pour cet artisan, on retourne un widget vide
+                        return const SizedBox.shrink();
+                      },
+                    ),
             ),
           ),
         ],

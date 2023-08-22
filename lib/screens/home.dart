@@ -79,7 +79,8 @@ class _HomeState extends State<Home> {
             ),
             //slider select
             Positioned(
-              bottom: 9,
+              bottom: 5,
+              top: 10,
               left: 0,
               right: 0,
               child: Row(
@@ -104,7 +105,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             //Services
             Padding(
@@ -268,6 +269,9 @@ class _HomeState extends State<Home> {
               ),
             ),
             //Recommend for
+            const SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
               child: Container(
@@ -445,7 +449,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             //Rej comm
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             //Dev artisan
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
