@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
           children: [
             //slider
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 0),
               child: CarouselSlider(
                 items: imagesList
                     .map((item) => ClipRRect(
@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
             ),
             //slider select
             Positioned(
-              bottom: 5,
+              bottom: 9,
               left: 0,
               right: 0,
               child: Row(
@@ -510,6 +510,7 @@ class _AppBarState extends State<AppBar> {
           builder: (context) => ResultatPage(searchTerm: searchTerm),
         ),
       );
+      searchController.clear();
     }
   }
 
@@ -559,9 +560,9 @@ class _AppBarState extends State<AppBar> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 0),
           Container(
-            margin: const EdgeInsets.only(top: 5, bottom: 20),
+            margin: const EdgeInsets.only(top: 5, bottom: 0),
             width: MediaQuery.of(context).size.width,
             height: 55,
             alignment: Alignment.center,

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:map_location_picker/map_location_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -20,7 +21,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void initState() {
     super.initState();
     loadAuthToken();
+    fetchData();
   }
+
+  List<dynamic> data = [];
+  List<DropdownMenuItem<String>> dropdownItems = [];
+  int quartier = 0;
 
   String authToken = "";
 
@@ -31,6 +37,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
       authToken = token ?? '';
       print(authToken);
     });
+  }
+
+  Future<void> fetchData() async {
+    final url = Uri.parse('http://10.0.2.2:9000/api/v1/qu/quartiers');
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $authToken', // Add token to headers
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> responseData = json.decode(response.body);
+
+      setState(() {
+        data = responseData;
+        print(data);
+
+        dropdownItems = data.map<DropdownMenuItem<String>>((dynamic item) {
+          final Map<String, dynamic> quartier = item as Map<String, dynamic>;
+          return DropdownMenuItem<String>(
+            value: quartier['id'],
+            child: Text(quartier['libele'] as String,
+                style: GoogleFonts.poppins(fontSize: 12)),
+          );
+        }).toList();
+
+        // Tri des éléments par ordre alphabétique
+        dropdownItems.sort((a, b) => a.value!.compareTo(b.value!));
+      });
+    } else {
+      print("Erreur: ${response.statusCode}");
+    }
   }
 
   final TextEditingController _nomController = TextEditingController();
@@ -46,6 +85,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String prenom = _prenomController.text;
     String email = _emailController.text;
     String telephone = _telephoneController.text;
+    int quartierId = quartier;
 
     var res = await http.put(
       url,
@@ -58,6 +98,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'prenom': prenom,
         'email': email,
         'num_telephone': telephone,
+        'quartierId': quartierId,
       }),
     );
     if (res.statusCode == 200) {
@@ -138,6 +179,66 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               const SizedBox(
                 height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(0),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: ListView(shrinkWrap: true, children: [
+                    DropdownButton<String>(
+                      focusColor: Colors.grey,
+                      isExpanded: true,
+                      // ignore: prefer_null_aware_operators, unnecessary_null_comparison
+                      value: quartier != null ? quartier.toString() : null,
+                      onChanged: (newValue) {
+                        setState(() {
+                          quartier = newValue! as int;
+                          print(quartier);
+                        });
+                      },
+                      items: dropdownItems.isNotEmpty ? dropdownItems : null,
+                      hint: dropdownItems.isNotEmpty
+                          ? const Text('Sélectionnez un quartier',
+                              style: TextStyle(
+                                  fontFamily: 'poppins', fontSize: 12))
+                          : const Text('Aucun quartier disponible'),
+                    ),
+                  ]),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: 400,
+                height: 40,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Map<String, dynamic> result =
+                        await Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const MapLocationPicker(
+                        apiKey: 'AIzaSyAu76Kt4TGshChEI2kBSuAOdebFLKOFJII',
+                      ),
+                    ));
+
+                    // ignore: unnecessary_null_comparison
+                    if (result != null && result['location'] != null) {
+                      LatLng location = result['location'];
+                      print('Location picked: $location');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      side: BorderSide.none, shape: const StadiumBorder()),
+                  child: Text(
+                    'Où offrez vous, vôtre service ?',
+                    style:
+                        GoogleFonts.poppins(fontSize: 15, color: Colors.white),
+                  ),
+                ),
               ),
               const SizedBox(height: 30.0),
               Container(
