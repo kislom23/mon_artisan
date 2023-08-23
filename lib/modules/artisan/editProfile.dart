@@ -111,7 +111,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       Navigator.of(context).pop();
     } else {
       Fluttertoast.showToast(
-        msg: 'Erreur',
+        msg: 'Une erreur s\'est produite. Veuillez reessayer plus tard',
         gravity: ToastGravity.BOTTOM,
         fontSize: 16,
       );
@@ -218,7 +218,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: () async {
-                    Map<String, dynamic> result =
+                    Map<String, dynamic>? result =
                         await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const MapLocationPicker(
                         apiKey: 'AIzaSyAu76Kt4TGshChEI2kBSuAOdebFLKOFJII',
@@ -226,9 +226,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ));
 
                     // ignore: unnecessary_null_comparison
-                    if (result != null && result['location'] != null) {
+                    if (result != null && result.containsKey('location')) {
                       LatLng location = result['location'];
                       print('Location picked: $location');
+                    } else {
+                      // Afficher un message si la liste est vide
+                      print('Veuillez choisir une localisation');
+                      Fluttertoast.showToast(
+                        msg: "Veuillez choisir une localisation",
+                        gravity: ToastGravity.BOTTOM,
+                        fontSize: 16,
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
