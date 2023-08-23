@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nye_dowola/modules/auth/Login.dart';
-import 'package:nye_dowola/screens/home_page.dart';
 import 'package:nye_dowola/screens/home.dart';
+import 'package:nye_dowola/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -47,11 +47,12 @@ class _MyAppState extends State<MyApp> {
         '/login': (context) => const LoginPage(),
       },
       home: FutureBuilder<bool>(
+        /*  */
         future: _isLoggedIn,
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
-              color: Colors.white, 
+              color: Colors.white,
               child: const Center(
                 child: CircularProgressIndicator(),
               ),

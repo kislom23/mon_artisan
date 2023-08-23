@@ -1,16 +1,19 @@
 // ignore_for_file: file_names, sized_box_for_whitespace, avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+  final int id;
+  const EditProfilePage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -22,6 +25,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     loadAuthToken();
     fetchData();
+  }
+
+  Uint8List? photoProfil;
+
+  Future<void> selectImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final imageBytes = await pickedFile.readAsBytes();
+      setState(() {
+        photoProfil = imageBytes;
+        _buildProfileImage();
+      });
+    }
   }
 
   List<dynamic> data = [];
@@ -36,6 +53,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     setState(() {
       authToken = token ?? '';
       print(authToken);
+      print(widget.id);
     });
   }
 
@@ -85,7 +103,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String prenom = _prenomController.text;
     String email = _emailController.text;
     String telephone = _telephoneController.text;
-    int quartierId = quartier;
+    //int quartierId = quartier;
 
     var res = await http.put(
       url,
@@ -94,11 +112,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'Authorization': 'Bearer $authToken'
       },
       body: json.encode({
+        'id': widget.id,
         'nom': nom,
         'prenom': prenom,
         'email': email,
         'num_telephone': telephone,
-        'quartierId': quartierId,
+        'photo_profile': photoProfil,
+        'quartierId': 1,
+        'localisation': {
+          'adresse': '11 Agoe vakpoe',
+          'longitude': '76.098',
+          'latitude': '89.536',
+        }
       }),
     );
     if (res.statusCode == 200) {
@@ -116,6 +141,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
         fontSize: 16,
       );
       print(res.statusCode);
+      print(res.body);
+    }
+  }
+
+  Widget _buildProfileImage() {
+    if (photoProfil == null) {
+      // Si aucune image n'est sélectionnée, affichez une image réseau
+      return ClipRRect(
+          borderRadius: BorderRadius.circular(60),
+          child: Image.asset(
+            "assets/images/télécharger.png",
+            fit: BoxFit.cover,
+          ));
+    } else {
+      // Si une image est sélectionnée, affichez l'image depuis la mémoire
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(60),
+        child: Image.memory(
+          photoProfil!,
+          fit: BoxFit.cover,
+        ),
+      );
     }
   }
 
@@ -128,7 +175,52 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: Column(
             children: [
               const SizedBox(
-                height: 40,
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 130,
+                    height: 130,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 4, color: Colors.white),
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 2,
+                            blurRadius: 10,
+                            color: Colors.black.withOpacity(0.1))
+                      ],
+                      shape: BoxShape.circle,
+                    ),
+                    child: _buildProfileImage(),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      selectImage();
+                    },
+                    child: Positioned(
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(width: 4, color: Colors.white),
+                          color: Colors.orange,
+                        ),
+                        child: const Icon(
+                          Icons.add_a_photo,
+                          size: 17,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
               ),
               TextField(
                 controller: _nomController,

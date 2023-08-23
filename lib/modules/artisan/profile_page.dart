@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
 import 'package:http/http.dart' as http;
+import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
 import 'package:nye_dowola/main.dart';
 import 'package:nye_dowola/modules/artisan/editProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -105,6 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String telUser = '';
   String quartierUser = '';
   String photoUser = '';
+  int idUser = 0;
 
   Future<void> fetchData() async {
     final url =
@@ -118,7 +119,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       Map<String, dynamic> responseData = json.decode(response.body);
+      int userId = responseData['id'];
       String nom = responseData['nom'].toString();
       String prenom = responseData['prenom'].toString();
       String email = responseData['email'].toString();
@@ -133,6 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
         telUser = tel;
         quartierUser = quartier;
         photoUser = photo;
+        idUser = userId;
       });
     } else {
       print("Erreur: ${response.statusCode}");
@@ -185,7 +189,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const EditProfilePage()));
+                              builder: (context) => EditProfilePage(
+                                    id: idUser,
+                                  )));
                     },
                     style: ElevatedButton.styleFrom(
                         side: BorderSide.none, shape: const StadiumBorder()),
