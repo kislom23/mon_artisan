@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -61,6 +62,7 @@ class _ResultatPageState extends State<ResultatPage> {
 
       setState(() {
         data = responseData;
+        print(data);
         setState(() {
           searchController.clear();
         });
@@ -87,23 +89,29 @@ class _ResultatPageState extends State<ResultatPage> {
           Padding(
             padding:
                 const EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 35),
-            child: TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                filled: true,
-                //fillColor: Colors.grey.shade300,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide.none,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      //fillColor: Colors.grey.shade300,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintText: "Quel service avez besoin ?",
+                      prefixIcon: const Icon(Icons.search),
+                      prefixIconColor: Colors.orange,
+                    ),
+                    onSubmitted: (value) {
+                      searchTerm = value;
+                      search2();
+                    },
+                  ),
                 ),
-                hintText: "Quel service avez besoin ?",
-                prefixIcon: const Icon(Icons.search),
-                prefixIconColor: Colors.black,
-              ),
-              onSubmitted: (value) {
-                searchTerm = value;
-                search2();
-              },
+              ],
             ),
           ),
           Expanded(
@@ -126,7 +134,16 @@ class _ResultatPageState extends State<ResultatPage> {
                         final artisan = data[index];
                         final artisanName = artisan['nom'];
                         final artisanPrenom = artisan['prenom'];
+                        final artisanPhoto = artisan['photo_profil'];
                         final artisanServices = artisan['offreServices'];
+                        final artisanPrestationService = artisan['prestations']['id'];
+
+                        Uint8List? photoProfil;
+
+                        if (artisanPhoto != null) {
+                          photoProfil =
+                              Uint8List.fromList(base64Decode(artisanPhoto));
+                        }
 
                         for (var service in artisanServices) {
                           if (service != null &&
@@ -138,13 +155,32 @@ class _ResultatPageState extends State<ResultatPage> {
                                   .contains(searchTerm.toLowerCase())) {
                             final serviceName =
                                 service['nomDuService'].toString();
+                            final categorieService =
+                                service['categorieDeService'];
+
+                            String categorie = "";
+                            if (categorieService != null &&
+                                categorieService['categorieService'] != null) {
+                              categorie = categorieService['categorieService'];
+                            }
 
                             return Card(
                               color: Colors.white,
                               elevation: 1.0,
                               child: ListTile(
-                                leading: const CircleAvatar(
-                                    child: Icon(Icons.person, size: 30)),
+                                leading: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(60),
+                                      child: photoProfil != null
+                                          ? Image.memory(
+                                              photoProfil,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : const Image(
+                                              image: AssetImage(
+                                                  'assets/images/télécharger.png')),
+                                    )),
                                 title: Text(
                                   '$artisanName $artisanPrenom',
                                   style: GoogleFonts.poppins(
@@ -156,7 +192,7 @@ class _ResultatPageState extends State<ResultatPage> {
                                 subtitle: Text(
                                   serviceName,
                                   style: GoogleFonts.poppins(
-                                    fontSize: 10,
+                                    fontSize: 14,
                                   ),
                                 ),
                                 trailing: GestureDetector(
@@ -165,6 +201,8 @@ class _ResultatPageState extends State<ResultatPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: ((context) => DetailsPage(
+                                              prestationService: artisanPrestationService,
+                                              photo: photoProfil,
                                               nom: artisanName,
                                               prenom: artisanPrenom,
                                               email: artisan['email'],
@@ -173,11 +211,9 @@ class _ResultatPageState extends State<ResultatPage> {
                                                       .toString(),
                                               nomDuService:
                                                   service['nomDuService'],
-                                              categorie: service[
-                                                      'categorie_De_Service']
-                                                  ['categorieService'],
+                                              categorie: categorie,
                                               description: service[
-                                                  'description_du_service'],
+                                                  'descriptionDuService'],
                                             )),
                                       ),
                                     );

@@ -37,13 +37,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
       setState(() {
         photoProfil = imageBytes;
         _buildProfileImage();
+        print(photoProfil);
       });
     }
   }
 
   List<dynamic> data = [];
   List<DropdownMenuItem<String>> dropdownItems = [];
-  int quartier = 0;
+
+  int quartier = 1;
 
   String authToken = "";
 
@@ -76,7 +78,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         dropdownItems = data.map<DropdownMenuItem<String>>((dynamic item) {
           final Map<String, dynamic> quartier = item as Map<String, dynamic>;
           return DropdownMenuItem<String>(
-            value: quartier['id'],
+            value: quartier['id'].toString(),
             child: Text(quartier['libele'] as String,
                 style: GoogleFonts.poppins(fontSize: 12)),
           );
@@ -103,7 +105,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String prenom = _prenomController.text;
     String email = _emailController.text;
     String telephone = _telephoneController.text;
-    //int quartierId = quartier;
+
+    int quartierId = quartier;
+
+    String? photoBase64;
+
+    if (photoProfil != null) {
+      photoBase64 =
+          base64Encode(photoProfil!); // Convert Uint8List to Base64 string
+    }
 
     var res = await http.put(
       url,
@@ -117,22 +127,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'prenom': prenom,
         'email': email,
         'num_telephone': telephone,
-        'photo_profile': photoProfil,
-        'quartierId': 1,
+        'photo_profil': photoBase64,
         'localisation': {
-          'adresse': '11 Agoe vakpoe',
+          'adresse': '112 Agoe vakpoe',
           'longitude': '76.098',
           'latitude': '89.536',
+          'quartierId': quartierId,
         }
       }),
     );
     if (res.statusCode == 200) {
       print(res.body);
+
+      var jsonResponse = json.decode(res.body);
+      var token = jsonResponse['token'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+
       Fluttertoast.showToast(
         msg: 'Modification effectué',
         gravity: ToastGravity.BOTTOM,
         fontSize: 16,
       );
+
       Navigator.of(context).pop();
     } else {
       Fluttertoast.showToast(
@@ -285,10 +303,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       focusColor: Colors.grey,
                       isExpanded: true,
                       // ignore: prefer_null_aware_operators, unnecessary_null_comparison
-                      value: quartier != null ? quartier.toString() : null,
+                      value:
+                          dropdownItems.isNotEmpty ? quartier.toString() : null,
                       onChanged: (newValue) {
                         setState(() {
-                          quartier = newValue! as int;
+                          quartier = int.parse(newValue!);
                           print(quartier);
                         });
                       },
@@ -313,7 +332,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Map<String, dynamic>? result =
                         await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const MapLocationPicker(
-                        apiKey: 'AIzaSyAu76Kt4TGshChEI2kBSuAOdebFLKOFJII',
+                        apiKey: 'AIzaSyD426GG6w5ueJan7zIMo5odyf6enhe1Px4',
                       ),
                     ));
 

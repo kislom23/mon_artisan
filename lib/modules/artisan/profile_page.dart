@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -107,6 +108,8 @@ class _ProfilePageState extends State<ProfilePage> {
   String photoUser = '';
   int idUser = 0;
 
+  Uint8List? photoProfile;
+
   Future<void> fetchData() async {
     final url =
         Uri.parse('http://10.0.2.2:9000/api/v1/auth/artisand/$userEmail');
@@ -126,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
       String prenom = responseData['prenom'].toString();
       String email = responseData['email'].toString();
       String tel = responseData['num_telephone'].toString();
-      String quartier = responseData['quartier'].toString();
+      String quartier = responseData['localisations']['quartier']['libele'].toString();
       String photo = responseData['photo_profil'].toString();
 
       setState(() {
@@ -137,6 +140,11 @@ class _ProfilePageState extends State<ProfilePage> {
         quartierUser = quartier;
         photoUser = photo;
         idUser = userId;
+
+        // ignore: unnecessary_null_comparison
+        if (photoUser != null) {
+          photoProfile = Uint8List.fromList(base64Decode(photoUser));
+        }
       });
     } else {
       print("Erreur: ${response.statusCode}");
@@ -159,8 +167,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 120,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: const Image(
-                      image: AssetImage('assets/images/télécharger.png')),
+                  child: photoProfile != null
+                      ? Image.memory(
+                          photoProfile!,
+                          fit: BoxFit.cover,
+                        )
+                      : const Image(
+                          image: AssetImage('assets/images/télécharger.png')),
                 ),
               ),
               const SizedBox(

@@ -28,8 +28,8 @@
               android:resource="@style/NormalTheme"
               />
             <meta-data 
-                android:name="com.google.android.geo.AIzaSyAu76Kt4TGshChEI2kBSuAOdebFLKOFJII"
-                android:value="AIzaSyAu76Kt4TGshChEI2kBSuAOdebFLKOFJII"
+                android:name="com.google.android.geo.AIzaSyD426GG6w5ueJan7zIMo5odyf6enhe1Px4"
+                android:value="AIzaSyD426GG6w5ueJan7zIMo5odyf6enhe1Px4"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -1,11 +1,11 @@
 // ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'package:carousel_slider/carousel_slider.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:nye_dowola/modules/auth/Register.dart';
 import 'package:nye_dowola/modules/client/resultat_recherche.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../modules/auth/Login.dart';
 
@@ -518,6 +518,22 @@ class _AppBarState extends State<AppBar> {
     }
   }
 
+  void _sendEmail() async {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: 'nyedowolatogo@gmail.com',
+      query: 'subject=ASSISANCE&body=Mon%20corps%20du%20message',
+    );
+
+    
+
+    if (await canLaunchUrl(params)) {
+      await launchUrl(params);
+    } else {
+      throw 'Impossible de lancer ';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -556,8 +572,10 @@ class _AppBarState extends State<AppBar> {
                           MaterialPageRoute(builder: (c) => const LoginPage()));
                       break;
                     case _MenuValue.contacter:
+                      _sendEmail();
                       break;
                     case _MenuValue.asistance:
+                      _sendEmail();
                       break;
                   }
                 },

@@ -1,12 +1,13 @@
 // ignore_for_file: file_names, avoid_print, sized_box_for_whitespace, avoid_unnecessary_containers, prefer_interpolation_to_compose_strings, use_build_context_synchronously
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class ServicePage extends StatefulWidget {
   const ServicePage({Key? key}) : super(key: key);
