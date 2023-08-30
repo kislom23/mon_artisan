@@ -136,8 +136,9 @@ class _ResultatPageState extends State<ResultatPage> {
                         final artisanPrenom = artisan['prenom'];
                         final artisanPhoto = artisan['photo_profil'];
                         final artisanServices = artisan['offreServices'];
-                        final artisanPrestationService = artisan['prestations']['id'];
-
+                        final artisanPrestations = artisan['prestations'];
+                        final artisanPrestationService =
+                            artisanPrestations[0]['id'];
                         Uint8List? photoProfil;
 
                         if (artisanPhoto != null) {
@@ -201,7 +202,8 @@ class _ResultatPageState extends State<ResultatPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: ((context) => DetailsPage(
-                                              prestationService: artisanPrestationService,
+                                              prestationService:
+                                                  artisanPrestationService,
                                               photo: photoProfil,
                                               nom: artisanName,
                                               prenom: artisanPrenom,

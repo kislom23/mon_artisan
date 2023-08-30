@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:map_location_picker/map_location_picker.dart';
+import 'package:nye_dowola/modules/artisan/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -99,12 +100,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   final url = Uri.parse('http://10.0.2.2:9000/api/v1/auth/artisan/modifier');
 
+  String adresseMap = '';
+  String longitudeMap = '';
+  String latitudeMap = '';
+  String adresse = '112 Agoe vakpoe';
+  String longitude = '6.219905';
+  String latitude = '1.157679';
+
   Future<void> _submitForm() async {
     // Récupérer les valeurs saisies dans les variables
     String nom = _nomController.text;
     String prenom = _prenomController.text;
     String email = _emailController.text;
     String telephone = _telephoneController.text;
+
+    if (_emailController.text.isEmpty ||
+        _prenomController.text.isEmpty ||
+        _nomController.text.isEmpty ||
+        _telephoneController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: "Veuillez remplir tous les champs",
+        gravity: ToastGravity.BOTTOM,
+        fontSize: 16,
+      );
+      return;
+    }
 
     int quartierId = quartier;
 
@@ -129,9 +149,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'num_telephone': telephone,
         'photo_profil': photoBase64,
         'localisation': {
-          'adresse': '112 Agoe vakpoe',
-          'longitude': '76.098',
-          'latitude': '89.536',
+          'adresse': adresse,
+          'longitude': longitude,
+          'latitude': latitude,
           'quartierId': quartierId,
         }
       }),
@@ -151,7 +171,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
         fontSize: 16,
       );
 
-      Navigator.of(context).pop();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
+      );
     } else {
       Fluttertoast.showToast(
         msg: 'Une erreur s\'est produite. Veuillez reessayer plus tard',
@@ -169,7 +192,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       return ClipRRect(
           borderRadius: BorderRadius.circular(60),
           child: Image.asset(
-            "assets/images/télécharger.png",
+            "assets/images/LOGO-01.png",
             fit: BoxFit.cover,
           ));
     } else {
@@ -326,37 +349,84 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               Container(
                 width: 400,
-                height: 40,
+                height: 45,
                 child: ElevatedButton(
                   onPressed: () async {
-                    Map<String, dynamic>? result =
-                        await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const MapLocationPicker(
-                        apiKey: 'AIzaSyD426GG6w5ueJan7zIMo5odyf6enhe1Px4',
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MapLocationPicker(
+                        searchHintText: "Rechercher une localisation",
+                        bottomCardTooltip: "Continuez avec cette localisation",
+                        apiKey: "AIzaSyCr0sESHO1Ek5jFQVEpbiFOwucmkdm-kPg",
+                        language: "Fr",
+                        popOnNextButtonTaped: true,
+                        currentLatLng: const LatLng(6.1375, 1.2125),
+                        onNext: (GeocodingResult? result) {
+                          if (result != null) {
+                            setState(() {
+                              adresseMap = result.formattedAddress ?? "";
+                              latitudeMap =
+                                  result.geometry.location.lat.toString();
+                              longitudeMap =
+                                  result.geometry.location.lng.toString();
+                              adresse = adresseMap;
+                              longitude = longitudeMap;
+                              latitude = latitudeMap;
+                              print(adresse);
+                            });
+                          } else {
+                            // Afficher un message si la liste est vide
+                            print('Veuillez choisir une localisation');
+                            Fluttertoast.showToast(
+                              msg: "Veuillez choisir une localisation",
+                              gravity: ToastGravity.BOTTOM,
+                              fontSize: 16,
+                            );
+                          }
+                        },
+                        onSuggestionSelected: (PlacesDetailsResponse? result) {
+                          if (result != null) {
+                            setState(() {
+                              adresseMap = result.result.formattedAddress ?? "";
+                              latitudeMap = result.result.geometry!.location.lat
+                                  .toString();
+                              longitudeMap = result
+                                  .result.geometry!.location.lng
+                                  .toString();
+                              adresse = adresseMap;
+                              longitude = longitudeMap.toString();
+                              latitude = latitudeMap.toString();
+                              print(adresse);
+                            });
+                          } else {
+                            // Afficher un message si la liste est vide
+                            print('Veuillez choisir une localisation');
+                            Fluttertoast.showToast(
+                              msg: "Veuillez choisir une localisation",
+                              gravity: ToastGravity.BOTTOM,
+                              fontSize: 16,
+                            );
+                          }
+                        },
                       ),
                     ));
-
-                    // ignore: unnecessary_null_comparison
-                    if (result != null && result.containsKey('location')) {
-                      LatLng location = result['location'];
-                      print('Location picked: $location');
-                    } else {
-                      // Afficher un message si la liste est vide
-                      print('Veuillez choisir une localisation');
-                      Fluttertoast.showToast(
-                        msg: "Veuillez choisir une localisation",
-                        gravity: ToastGravity.BOTTOM,
-                        fontSize: 16,
-                      );
-                    }
                   },
                   style: ElevatedButton.styleFrom(
                       side: BorderSide.none, shape: const StadiumBorder()),
-                  child: Text(
-                    'Où offrez vous, vôtre service ?',
-                    style:
-                        GoogleFonts.poppins(fontSize: 15, color: Colors.white),
-                  ),
+                  child: adresseMap != ''
+                      ? Center(
+                          child: Text(
+                            adresseMap,
+                            style: GoogleFonts.poppins(
+                                fontSize: 15, color: Colors.white),
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            'Où offrez vous, vôtre service ?',
+                            style: GoogleFonts.poppins(
+                                fontSize: 15, color: Colors.white),
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: 30.0),

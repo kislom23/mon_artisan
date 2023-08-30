@@ -18,7 +18,7 @@ class DetailsPage extends StatefulWidget {
   final String categorie;
   final String description;
   final Uint8List? photo;
-  final String prestationService;
+  final int prestationService;
 
   const DetailsPage({
     Key? key,
@@ -37,100 +37,129 @@ class DetailsPage extends StatefulWidget {
   State<DetailsPage> createState() => _DetailsPageState();
 }
 
-class _DetailsPageState extends State<DetailsPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Center(
-              child: SizedBox(
-                width: 120,
-                height: 120,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: widget.photo != null
-                      ? Image.memory(
-                          widget.photo!,
-                          fit: BoxFit.cover,
-                        )
-                      : const Image(
-                          image: AssetImage('assets/images/télécharger.png')),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: Text(
-                widget.nomDuService,
-                style: GoogleFonts.poppins(fontSize: 15, color: Colors.black),
-              ),
-            ),
-            Center(
-              child: Text(
-                '${widget.nom} ${widget.prenom}',
-                style: GoogleFonts.poppins(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
-            Row(
+Future openDialog(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        title: Text('Remplissez'),
+        content: SizedBox(
+          height: 200,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: ListTile(
-                    leading: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.orange,
-                      ),
-                      child: const Icon(
-                        LineAwesomeIcons.envelope,
-                        color: Colors.white,
-                      ),
-                    ),
-                    title: Text(
-                      widget.email,
-                      style: GoogleFonts.poppins(fontSize: 11),
-                    ),
-                  ),
+                TextField(
+                  decoration: InputDecoration(hintText: 'Entrer vôtre nom'),
                 ),
-                Expanded(
-                  child: ListTile(
-                    leading: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.orange,
-                      ),
-                      child: const Icon(
-                        LineAwesomeIcons.phone,
-                        color: Colors.white,
-                      ),
-                    ),
-                    title: Text(
-                      widget.numTelephone,
-                      style: GoogleFonts.poppins(fontSize: 10),
-                    ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    hintText: 'Entrer vôtre commentaire',
+                    border: OutlineInputBorder(),
                   ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 10,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: null,
+            child: Text(
+              'Envoyer',
+              style: TextStyle(fontSize: 20, color: Colors.orange),
             ),
-            Container(
+          )
+        ],
+      ),
+    );
+
+class _DetailsPageState extends State<DetailsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          // ignore: sized_box_for_whitespace
+          Container(
+            width: double.infinity,
+            height: 250,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: widget.photo != null
+                  ? Image.memory(
+                      widget.photo!,
+                      fit: BoxFit.cover,
+                    )
+                  : const Image(
+                      image: AssetImage('assets/images/télécharger.png')),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+
+          Center(
+            child: Text(
+              '${widget.nom} ${widget.prenom}',
+              style: GoogleFonts.poppins(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: ListTile(
+                  leading: Container(
+                    width: 35,
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.orange,
+                    ),
+                    child: const Icon(
+                      LineAwesomeIcons.envelope,
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text(
+                    widget.email,
+                    style: GoogleFonts.poppins(fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ListTile(
+                  leading: Container(
+                    width: 35,
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.orange,
+                    ),
+                    child: const Icon(
+                      LineAwesomeIcons.phone,
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text(
+                    widget.numTelephone,
+                    style: GoogleFonts.poppins(fontSize: 15),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
               decoration: BoxDecoration(
                 color: Colors.green,
                 borderRadius: BorderRadius.circular(8),
@@ -158,71 +187,73 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
               'Description : ${widget.description}',
               style: GoogleFonts.poppins(
                 fontSize: 15,
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              width: 250,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    side: BorderSide.none, shape: const StadiumBorder()),
-                child: Text(
-                  'Notez ${widget.prenom}',
-                  style: GoogleFonts.poppins(fontSize: 15, color: Colors.white),
-                ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            width: 250,
+            height: 40,
+            child: ElevatedButton(
+              onPressed: () {
+                openDialog(context);
+              },
+              style: ElevatedButton.styleFrom(
+                  side: BorderSide.none, shape: const StadiumBorder()),
+              child: Text(
+                'Notez ${widget.prenom}',
+                style: GoogleFonts.poppins(fontSize: 15, color: Colors.white),
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // google button
-                GestureDetector(
-                  onTap: () {},
-                  child: const SquareTile(imagePath: 'assets/images/map.png'),
-                ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // google button
+              GestureDetector(
+                onTap: () {},
+                child: const SquareTile(imagePath: 'assets/images/map.png'),
+              ),
 
-                const SizedBox(width: 20),
+              const SizedBox(width: 20),
 
-                GestureDetector(
-                  onTap: () {
-                    String phoneNumber = widget.numTelephone;
-                    final Uri url = Uri.parse('tel:$phoneNumber');
-                    launchUrl(url);
-                  },
-                  child: const SquareTile(
-                      imagePath: 'assets/images/phone-call.png'),
-                ),
+              GestureDetector(
+                onTap: () {
+                  String phoneNumber = widget.numTelephone;
+                  final Uri url = Uri.parse('tel:$phoneNumber');
+                  launchUrl(url);
+                },
+                child:
+                    const SquareTile(imagePath: 'assets/images/phone-call.png'),
+              ),
 
-                const SizedBox(width: 20),
+              const SizedBox(width: 20),
 
-                // apple button
-                GestureDetector(
-                  onTap: () {
-                    String phoneNumber = widget.numTelephone;
-                    final Uri url = Uri.parse('https://wa.me/$phoneNumber');
-                    launchUrl(url);
-                  },
-                  child:
-                      const SquareTile(imagePath: 'assets/images/whatsapp.png'),
-                )
-              ],
-            ),
-          ],
-        ),
+              // apple button
+              GestureDetector(
+                onTap: () {
+                  String phoneNumber = widget.numTelephone;
+                  final Uri url = Uri.parse('https://wa.me/$phoneNumber');
+                  launchUrl(url);
+                },
+                child:
+                    const SquareTile(imagePath: 'assets/images/whatsapp.png'),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -525,8 +525,6 @@ class _AppBarState extends State<AppBar> {
       query: 'subject=ASSISANCE&body=Mon%20corps%20du%20message',
     );
 
-    
-
     if (await canLaunchUrl(params)) {
       await launchUrl(params);
     } else {

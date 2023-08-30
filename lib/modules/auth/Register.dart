@@ -1,15 +1,16 @@
 // ignore_for_file: use_build_context_synchronously, use_key_in_widget_constructors, file_names, avoid_print
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:nye_dowola/common/my_button2.dart';
 import 'package:nye_dowola/common/my_textfield.dart';
 import 'package:nye_dowola/modules/auth/Login.dart';
 import 'package:nye_dowola/modules/auth/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key});
@@ -41,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
       List<dynamic> responseData = json.decode(response.body);
 
       setState(() {
-        data = responseData;
+        data = responseData.whereType<Map<String, dynamic>>().toList();
         print(data);
 
         dropdownItems = data.map<DropdownMenuItem<String>>((dynamic item) {
@@ -50,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return DropdownMenuItem<String>(
             value: offreService['nomDuService'] as String,
             child: Text(offreService['nomDuService'] as String,
-                style: GoogleFonts.poppins(fontSize: 12)),
+                style: GoogleFonts.poppins(fontSize: 15)),
           );
         }).toList();
 
@@ -183,13 +184,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Container(
                     padding: const EdgeInsets.only(left: 8, right: 8),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 1),
+                      color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: ListView(shrinkWrap: true, children: [
                       DropdownButton<String>(
                         menuMaxHeight: 300,
                         focusColor: Colors.grey,
+                        underline: Container(),
                         isExpanded: true,
                         value: offreService.isNotEmpty ? offreService : null,
                         onChanged: (newValue) {
@@ -200,10 +202,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         items: dropdownItems.isNotEmpty ? dropdownItems : null,
                         hint: dropdownItems.isNotEmpty
-                            ? const Text('Sélectionnez un service',
+                            ? Text('Sélectionnez un service',
                                 style: TextStyle(
-                                    fontFamily: 'poppins', fontSize: 12))
-                            : const Text('Aucun service disponible'),
+                                    fontFamily: 'poppins',
+                                    fontSize: 15,
+                                    color: Colors.grey[500]))
+                            : Text('Aucun service disponible',
+                                style: TextStyle(
+                                    fontFamily: 'poppins',
+                                    fontSize: 15,
+                                    color: Colors.grey[500])),
                       ),
                     ]),
                   ),

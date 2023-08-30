@@ -129,7 +129,8 @@ class _ProfilePageState extends State<ProfilePage> {
       String prenom = responseData['prenom'].toString();
       String email = responseData['email'].toString();
       String tel = responseData['num_telephone'].toString();
-      String quartier = responseData['localisations']['quartier']['libele'].toString();
+      // String quartier = responseData['localisations']['adresse'].toString();
+
       String photo = responseData['photo_profil'].toString();
 
       setState(() {
@@ -137,12 +138,13 @@ class _ProfilePageState extends State<ProfilePage> {
         prenomUser = prenom;
         emailUser = email;
         telUser = tel;
-        quartierUser = quartier;
+        //quartierUser = quartier;
         photoUser = photo;
         idUser = userId;
 
-        // ignore: unnecessary_null_comparison
-        if (photoUser != null) {
+        if (photoUser == 'null') {
+          photoProfile = null;
+        } else {
           photoProfile = Uint8List.fromList(base64Decode(photoUser));
         }
       });
@@ -173,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           fit: BoxFit.cover,
                         )
                       : const Image(
-                          image: AssetImage('assets/images/télécharger.png')),
+                          image: AssetImage('assets/images/LOGO-01.png')),
                 ),
               ),
               const SizedBox(
@@ -181,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               //nom et prenom
               Text(
-                '$prenomUser  $nomUser',
+                '$nomUser  $prenomUser',
                 style: GoogleFonts.poppins(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -238,10 +240,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Color.fromARGB(255, 45, 43, 107),
                   ),
                 ),
-                title: Text(
-                  telUser,
-                  style: GoogleFonts.poppins(fontSize: 16),
-                ),
+
+                // ignore: unnecessary_null_comparison
+                title: telUser != null && telUser != 'null'
+                    ? Text(
+                        telUser,
+                        style: GoogleFonts.poppins(fontSize: 16),
+                      )
+                    : Text(
+                        'Non Defini',
+                        style: GoogleFonts.poppins(fontSize: 16),
+                      ),
               ),
               const SizedBox(
                 height: 10,
@@ -259,10 +268,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Color.fromARGB(255, 45, 43, 107),
                   ),
                 ),
-                title: Text(
-                  quartierUser,
-                  style: GoogleFonts.poppins(fontSize: 16),
-                ),
+                // ignore: unnecessary_null_comparison
+                title: quartierUser.isNotEmpty
+                    ? Text(
+                        quartierUser,
+                        style: GoogleFonts.poppins(fontSize: 16),
+                      )
+                    : Text(
+                        'Non défini',
+                        style: GoogleFonts.poppins(fontSize: 16),
+                      ),
               ),
               const SizedBox(
                 height: 20,

@@ -26,14 +26,14 @@ class MyTextField extends StatelessWidget {
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade400),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
             ),
             fillColor: Colors.grey.shade200,
             filled: true,
             hintText: hintText,
             hintStyle:
-                GoogleFonts.poppins(fontSize: 12, color: Colors.grey[500])),
+                GoogleFonts.poppins(fontSize: 15, color: Colors.grey[500])),
       ),
     );
   }
