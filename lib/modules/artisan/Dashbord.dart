@@ -27,6 +27,7 @@ class _DashbordPageState extends State<DashbordPage> {
         builder: (context) => Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           child: Stack(
+            clipBehavior: Clip.none,
             alignment: Alignment.topCenter,
             children: [
               Container(
@@ -54,7 +55,8 @@ class _DashbordPageState extends State<DashbordPage> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            await prefs.setBool('show_dialogg', false);
+                            showDialogg = false;
+                            await prefs.setBool('show_dialogg', showDialogg);
                             Navigator.of(context).pop();
                           },
                           child: const Text(
@@ -86,7 +88,8 @@ class _DashbordPageState extends State<DashbordPage> {
       );
 
       // Enregistrez que l'AlertDialog a été affiché une fois
-      await prefs.setBool('show_dialog', false);
+      showDialogg = false;
+      await prefs.setBool('show_dialogg', showDialogg);
     }
 
     return showDialogg;

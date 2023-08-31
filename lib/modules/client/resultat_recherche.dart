@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unnecessary_null_comparison, depend_on_referenced_packages, prefer_interpolation_to_compose_strings, unrelated_type_equality_checks
 
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:nye_dowola/modules/client/artisanDetailsPage.dart';
@@ -25,7 +26,64 @@ class _ResultatPageState extends State<ResultatPage> {
   void initState() {
     super.initState();
     searchTerm = widget.searchTerm;
+    getLocationAndSearch();
+  }
+
+  Future<void> getLocationAndSearch() async {
+    await checkLocationService();
     search();
+  }
+
+  double clientLatitude = 0.0;
+  double clientLongitude = 0.0;
+
+  Future<void> checkLocationService() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.deniedForever) {
+      await Geolocator.openLocationSettings();
+    } else if (permission == LocationPermission.denied) {
+      await Geolocator.openAppSettings();
+    } else {
+      Position? position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      if (position != null) {
+        setState(() {
+          clientLatitude = position.latitude;
+          clientLongitude = position.longitude;
+          print(clientLatitude);
+          print(clientLongitude);
+        });
+      } else {
+        // La position du client est null
+        print('Impossible d\'obtenir la position du client');
+      }
+    }
+  }
+
+  double calculateDistance(double? artisanLatitude, double? artisanLongitude) {
+    if (artisanLatitude == null || artisanLongitude == null) {
+      return double.infinity;
+    }
+
+    if (clientLatitude == 0.0 || clientLongitude == 0.0) {
+      return double.infinity;
+    }
+
+    final clientLat = clientLatitude.toDouble();
+    final clientLon = clientLongitude.toDouble();
+    final artisanLat = artisanLatitude.toDouble();
+    final artisanLon = artisanLongitude.toDouble();
+
+    final distanceInMeters = Geolocator.distanceBetween(
+      clientLat,
+      clientLon,
+      artisanLat,
+      artisanLon,
+    );
+
+    return distanceInMeters;
   }
 
   TextEditingController searchController = TextEditingController();
@@ -38,6 +96,47 @@ class _ResultatPageState extends State<ResultatPage> {
 
     if (response.statusCode == 200) {
       List<dynamic> responseData = json.decode(response.body);
+
+      for (final artisan in responseData) {
+        final localisation = artisan['localisation'];
+
+        double artisanLatitude;
+        double artisanLongitude;
+
+        if (localisation != null &&
+            localisation != 'null' &&
+            localisation is Map) {
+          final latitude = localisation['latitude'];
+          final longitude = localisation['longitude'];
+          if (latitude != null && longitude != null) {
+            artisanLatitude = double.tryParse(latitude.toString()) ?? 0.0;
+            artisanLongitude = double.tryParse(longitude.toString()) ?? 0.0;
+            print(artisanLatitude);
+            print(artisanLongitude);
+          } else {
+            // Gérer le cas où latitude ou longitude sont nulles ici.
+            artisanLatitude = 0.0;
+            artisanLongitude = 0.0;
+          }
+        } else {
+          // Gérer le cas où localisation est nulle ici.
+          artisanLatitude = 0.0;
+          artisanLongitude = 0.0;
+        }
+
+        if (artisanLatitude != null && artisanLongitude != null) {
+          final artisanDistance =
+              calculateDistance(artisanLatitude, artisanLongitude);
+
+          // Ajouter la distance à l'objet artisan
+          artisan['distance'] = artisanDistance;
+
+          responseData.sort((a, b) => a['distance'].compareTo(b['distance']));
+        } else {
+          // Gérer le cas où artisanLatitude ou artisanLongitude sont nuls ici.
+          artisan['distance'] = double.infinity;
+        }
+      }
 
       setState(() {
         data = responseData;
@@ -60,9 +159,47 @@ class _ResultatPageState extends State<ResultatPage> {
     if (response.statusCode == 200) {
       List<dynamic> responseData = json.decode(response.body);
 
+      for (final artisan in responseData) {
+        final localisation = artisan['localisation'];
+        double artisanLatitude;
+        double artisanLongitude;
+
+        if (localisation != null && localisation is Map) {
+          final latitude = localisation['latitude'];
+          final longitude = localisation['longitude'];
+          if (latitude != null && longitude != null) {
+            artisanLatitude = double.tryParse(latitude.toString()) ?? 0.0;
+            artisanLongitude = double.tryParse(longitude.toString()) ?? 0.0;
+            print(artisanLatitude);
+            print(artisanLongitude);
+          } else {
+            // Gérer le cas où latitude ou longitude sont nulles ici.
+            artisanLatitude = 0.0;
+            artisanLongitude = 0.0;
+          }
+        } else {
+          // Gérer le cas où localisation est nulle ici.
+          artisanLatitude = 0.0;
+          artisanLongitude = 0.0;
+        }
+
+        if (artisanLatitude != null && artisanLongitude != null) {
+          final artisanDistance =
+              calculateDistance(artisanLatitude, artisanLongitude);
+
+          // Ajouter la distance à l'objet artisan
+          artisan['distance'] = artisanDistance;
+
+          responseData.sort((a, b) => a['distance'].compareTo(b['distance']));
+        } else {
+          // Gérer le cas où artisanLatitude ou artisanLongitude sont nuls ici.
+          artisan['distance'] = double.infinity;
+        }
+      }
+
       setState(() {
         data = responseData;
-        print(data);
+
         setState(() {
           searchController.clear();
         });
@@ -139,6 +276,17 @@ class _ResultatPageState extends State<ResultatPage> {
                         final artisanPrestations = artisan['prestations'];
                         final artisanPrestationService =
                             artisanPrestations[0]['id'];
+                        final localisation = artisan['localisation'];
+                        print(localisation);
+
+                        String artisanLatitude = '0.0';
+                        String artisanLongitude = '0.0';
+                        if (localisation != null && localisation is Map) {
+                          artisanLatitude = localisation['latitude'].toString();
+                          artisanLongitude =
+                              localisation['longitude'].toString();
+                        }
+
                         Uint8List? photoProfil;
 
                         if (artisanPhoto != null) {
@@ -214,6 +362,8 @@ class _ResultatPageState extends State<ResultatPage> {
                                               nomDuService:
                                                   service['nomDuService'],
                                               categorie: categorie,
+                                              latitude: artisanLatitude,
+                                              longitude: artisanLongitude,
                                               description: service[
                                                   'descriptionDuService'],
                                             )),

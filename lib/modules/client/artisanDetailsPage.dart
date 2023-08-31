@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, unnecessary_null_comparison
 
 import 'dart:typed_data';
 
@@ -20,6 +20,8 @@ class DetailsPage extends StatefulWidget {
   final String description;
   final Uint8List? photo;
   final int prestationService;
+  final String latitude;
+  final String longitude;
 
   const DetailsPage({
     Key? key,
@@ -32,6 +34,8 @@ class DetailsPage extends StatefulWidget {
     required this.photo,
     required this.description,
     required this.prestationService,
+    required this.latitude,
+    required this.longitude,
   }) : super(key: key);
 
   @override
@@ -161,10 +165,16 @@ class _DetailsPageState extends State<DetailsPage> {
                       color: Colors.white,
                     ),
                   ),
-                  title: Text(
-                    widget.numTelephone,
-                    style: GoogleFonts.poppins(fontSize: 15),
-                  ),
+                  title: widget.numTelephone != null &&
+                          widget.numTelephone != 'null'
+                      ? Text(
+                          widget.numTelephone,
+                          style: GoogleFonts.poppins(fontSize: 15),
+                        )
+                      : Text(
+                          'Pas défini',
+                          style: GoogleFonts.poppins(fontSize: 15),
+                        ),
                 ),
               ),
             ],
