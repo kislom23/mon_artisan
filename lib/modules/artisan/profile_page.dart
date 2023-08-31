@@ -129,7 +129,13 @@ class _ProfilePageState extends State<ProfilePage> {
       String prenom = responseData['prenom'].toString();
       String email = responseData['email'].toString();
       String tel = responseData['num_telephone'].toString();
-      // String quartier = responseData['localisations']['adresse'].toString();
+      String quartier = '';
+
+      if (responseData['localisations'].isNotEmpty) {
+        quartier = responseData['localisations'][0]['adresse'].toString();
+      } else {
+        quartier = 'null';
+      }
 
       String photo = responseData['photo_profil'].toString();
 
@@ -138,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
         prenomUser = prenom;
         emailUser = email;
         telUser = tel;
-        //quartierUser = quartier;
+        quartierUser = quartier;
         photoUser = photo;
         idUser = userId;
 
@@ -148,6 +154,8 @@ class _ProfilePageState extends State<ProfilePage> {
           photoProfile = Uint8List.fromList(base64Decode(photoUser));
         }
       });
+
+      print(quartierUser);
     } else {
       print("Erreur: ${response.statusCode}");
     }
@@ -269,7 +277,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 // ignore: unnecessary_null_comparison
-                title: quartierUser.isNotEmpty
+                title: quartierUser != null && quartierUser != 'null'
                     ? Text(
                         quartierUser,
                         style: GoogleFonts.poppins(fontSize: 16),

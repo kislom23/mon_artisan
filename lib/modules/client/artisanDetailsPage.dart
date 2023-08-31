@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,21 +40,35 @@ class DetailsPage extends StatefulWidget {
 
 Future openDialog(BuildContext context) => showDialog(
       context: context,
-      builder: (context) => const AlertDialog(
-        title: Text('Remplissez'),
+      builder: (context) => AlertDialog(
+        title: const Text('Remplissez'),
         content: SizedBox(
-          height: 200,
+          height: 250,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextField(
+                const TextField(
                   decoration: InputDecoration(hintText: 'Entrer vôtre nom'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                TextField(
+                RatingBar.builder(
+                  initialRating: 1,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  itemCount: 5,
+                  itemSize: 14,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  itemBuilder: (context, _) =>
+                      const Icon(Icons.star, color: Colors.orange),
+                  onRatingUpdate: (index) {},
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const TextField(
                   maxLines: 4,
                   decoration: InputDecoration(
                     hintText: 'Entrer vôtre commentaire',
@@ -64,7 +79,7 @@ Future openDialog(BuildContext context) => showDialog(
             ),
           ),
         ),
-        actions: [
+        actions: const [
           TextButton(
             onPressed: null,
             child: Text(

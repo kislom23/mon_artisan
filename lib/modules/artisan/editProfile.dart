@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:map_location_picker/map_location_picker.dart';
-import 'package:nye_dowola/modules/artisan/profile_page.dart';
+import 'package:nye_dowola/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -173,7 +173,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const ProfilePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } else {
       Fluttertoast.showToast(
@@ -356,7 +356,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       builder: (context) => MapLocationPicker(
                         searchHintText: "Rechercher une localisation",
                         bottomCardTooltip: "Continuez avec cette localisation",
-                        apiKey: "AIzaSyCr0sESHO1Ek5jFQVEpbiFOwucmkdm-kPg",
+                        apiKey: "AIzaSyCqaj8dP8JmwZ0Dki5mT-EvSyYr2dZBvkA",
                         language: "Fr",
                         popOnNextButtonTaped: true,
                         currentLatLng: const LatLng(6.1375, 1.2125),

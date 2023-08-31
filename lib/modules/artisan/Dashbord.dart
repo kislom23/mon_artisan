@@ -1,7 +1,7 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, sized_box_for_whitespace, use_build_context_synchronously, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashbordPage extends StatefulWidget {
   const DashbordPage({Key? key}) : super(key: key);
@@ -12,49 +12,146 @@ class DashbordPage extends StatefulWidget {
 
 class _DashbordPageState extends State<DashbordPage> {
   @override
+  void initState() {
+    super.initState();
+    shouldShowAlertDialog();
+  }
+
+  Future<bool> shouldShowAlertDialog() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool showDialogg = prefs.getBool('show_dialogg') ?? true;
+
+    if (showDialogg) {
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Container(
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 70, 10, 10),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Bienvenue',
+                          style: TextStyle(fontSize: 13, fontFamily: 'Poppins'),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        const Text(
+                          'Merci de faire partie de notre communauté, diriger vous vers l\'onglet profil pour parametrer votre compte',
+                          style: TextStyle(fontSize: 13, fontFamily: 'Poppins'),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await prefs.setBool('show_dialogg', false);
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'Ok',
+                            style: TextStyle(
+                                color: Colors.white, fontFamily: 'Poppins'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const Positioned(
+                top: -60,
+                child: CircleAvatar(
+                  backgroundColor: Colors.orangeAccent,
+                  radius: 60,
+                  child: Icon(
+                    Icons.message,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      // Enregistrez que l'AlertDialog a été affiché une fois
+      await prefs.setBool('show_dialog', false);
+    }
+
+    return showDialogg;
+  }
+
+  var height, width;
+
+  @override
   Widget build(BuildContext context) {
-    //final userEmail = ModalRoute.of(context)?.settings.arguments as String;
-    // ignore: prefer_const_constructors
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: const AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Ici,',
-              style: GoogleFonts.poppins(
-                  fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Vous trouverez les statistiques en rapport à votre profil, vos offres de services, et vos prestations de services.',
-              style: GoogleFonts.poppins(
-                fontSize: 15,
+      body: Container(
+        height: height,
+        width: width,
+        color: Colors.orangeAccent,
+        child: SingleChildScrollView(
+          child: Column(children: [
+            Container(
+              decoration: const BoxDecoration(),
+              height: height * 0.25,
+              width: width,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 35,
+                      left: 15,
+                      right: 15,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {},
+                          child: const Icon(
+                            Icons.sort,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ),
+                        ClipRRect(
+                          child: Image.asset(
+                            "assets/images/woman.png",
+                            height: 40,
+                            width: 40,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Vous y trouverez aussi vos meilleurs commentaires et notes de prestattions de services',
-              style: GoogleFonts.poppins(
-                fontSize: 15,
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(
-              'Au plaisir de vous revoir, je dis bonsoir et heureux de vous comptee parmi nos artisans 😉',
-              style: GoogleFonts.poppins(
-                fontSize: 15,
-              ),
-            ),
-          ],
+            Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                  )),
+              height: height * 0.75,
+              width: width,
+            )
+          ]),
         ),
       ),
     );
@@ -133,7 +230,7 @@ class AppBar extends StatelessWidget implements PreferredSizeWidget {
             child: TextFormField(
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Recherche....",
+                hintText: "Recherche...",
                 hintStyle: TextStyle(
                   color: Colors.black.withOpacity(0.5),
                 ),

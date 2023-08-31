@@ -180,7 +180,7 @@ class _ResultatPageState extends State<ResultatPage> {
                                             )
                                           : const Image(
                                               image: AssetImage(
-                                                  'assets/images/télécharger.png')),
+                                                  'assets/images/LOGO-01.png')),
                                     )),
                                 title: Text(
                                   '$artisanName $artisanPrenom',
