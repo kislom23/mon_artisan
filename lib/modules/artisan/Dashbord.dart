@@ -92,6 +92,20 @@ class _DashbordPageState extends State<DashbordPage> {
     return showDialogg;
   }
 
+  List imgSrc = [
+    'assets/images/clay-crafting.png',
+    'assets/images/comments.png',
+    'assets/images/help.png',
+    'assets/images/about.png',
+  ];
+
+  List titles = [
+    "Services",
+    "Commentaire",
+    "Assistance",
+    "A propos",
+  ];
+
   var height, width;
 
   @override
@@ -107,15 +121,15 @@ class _DashbordPageState extends State<DashbordPage> {
           child: Column(children: [
             Container(
               decoration: const BoxDecoration(),
-              height: height * 0.25,
+              height: height * 0.35,
               width: width,
               child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
                       top: 35,
-                      left: 15,
-                      right: 15,
+                      left: 20,
+                      right: 20,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,120 +142,117 @@ class _DashbordPageState extends State<DashbordPage> {
                             size: 40,
                           ),
                         ),
-                        ClipRRect(
-                          child: Image.asset(
-                            "assets/images/woman.png",
-                            height: 40,
-                            width: 40,
+                        Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white,
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/LOGO-01.png'),
+                            ),
                           ),
                         )
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      top: 35,
+                      left: 15,
+                      right: 15,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tableau de bord',
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'Mis à jour: 2 Sept 2023',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 1,
+                          ),
+                        ),
                       ],
                     ),
                   )
                 ],
               ),
             ),
-            Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  )),
-              height: height * 0.75,
-              width: width,
+            SingleChildScrollView(
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50),
+                    )),
+                height: height,
+                width: width,
+                child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.1,
+                      mainAxisSpacing: 25,
+                    ),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black26,
+                                spreadRadius: 1,
+                                blurRadius: 6,
+                              )
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                imgSrc[index],
+                                width: 100,
+                              ),
+                              Text(
+                                titles[index],
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              ),
             )
           ]),
         ),
-      ),
-    );
-  }
-}
-
-class AppBar extends StatelessWidget implements PreferredSizeWidget {
-  const AppBar({
-    super.key,
-  });
-
-  @override
-  Size get preferredSize => const Size.fromHeight(200);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
-      decoration: BoxDecoration(
-        color: Colors.orange.shade300,
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.sort_rounded,
-                  size: 30,
-                ),
-                color: Colors.white,
-                onPressed: null,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.category_rounded,
-                  size: 30,
-                ),
-                color: Colors.white,
-                onPressed: null,
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          // ignore: prefer_const_constructors
-          Padding(
-            padding: const EdgeInsets.only(left: 3, bottom: 15),
-            // ignore: prefer_const_constructors
-            child: Text(
-              "Bienvenue",
-              // ignore: prefer_const_constructors
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1,
-                wordSpacing: 2,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 5, bottom: 20),
-            width: MediaQuery.of(context).size.width,
-            height: 55,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TextFormField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Recherche...",
-                hintStyle: TextStyle(
-                  color: Colors.black.withOpacity(0.5),
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  size: 25,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

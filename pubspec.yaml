@@ -94,6 +94,12 @@ flutter:
   assets:
      - assets/icons/
      - assets/images/
+     - assets/images/clay-crafting.png
+     - assets/images/help.png
+     - assets/images/comments.png
+     - assets/images/about.png
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
