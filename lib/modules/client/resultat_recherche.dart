@@ -29,13 +29,23 @@ class _ResultatPageState extends State<ResultatPage> {
     getLocationAndSearch();
   }
 
+  bool isLoading = true;
   Future<void> getLocationAndSearch() async {
+    setState(() {
+      // Ajouter cette ligne
+      isLoading = true;
+    });
     await checkLocationService();
-    search();
+    await search();
+
+    setState(() {
+      // Ajouter cette ligne
+      isLoading = false;
+    });
   }
 
-  double clientLatitude = 0.0;
-  double clientLongitude = 0.0;
+  double? clientLatitude = 1.1;
+  double? clientLongitude = 1.1;
 
   Future<void> checkLocationService() async {
     LocationPermission permission = await Geolocator.requestPermission();
@@ -62,19 +72,32 @@ class _ResultatPageState extends State<ResultatPage> {
     }
   }
 
-  double calculateDistance(double? artisanLatitude, double? artisanLongitude) {
-    if (artisanLatitude == null || artisanLongitude == null) {
-      return double.infinity;
-    }
-
-    if (clientLatitude == 0.0 || clientLongitude == 0.0) {
-      return double.infinity;
+  double calculateDistance(
+    double? clientLatitude,
+    double? clientLongitude,
+    double? artisanLatitude,
+    double? artisanLongitude,
+  ) {
+    if (clientLatitude == null ||
+        clientLongitude == null ||
+        artisanLatitude == null ||
+        artisanLongitude == null) {
+      // Afficher un message d'erreur ou retourner une valeur par défaut
+      return 0;
     }
 
     final clientLat = clientLatitude.toDouble();
     final clientLon = clientLongitude.toDouble();
     final artisanLat = artisanLatitude.toDouble();
     final artisanLon = artisanLongitude.toDouble();
+
+    if (clientLat.isNaN ||
+        clientLon.isNaN ||
+        artisanLat.isNaN ||
+        artisanLon.isNaN) {
+      // Afficher un message d'erreur ou retourner une valeur par défaut
+      return 0;
+    }
 
     final distanceInMeters = Geolocator.distanceBetween(
       clientLat,
@@ -83,67 +106,83 @@ class _ResultatPageState extends State<ResultatPage> {
       artisanLon,
     );
 
-    return distanceInMeters;
+    // Convertir la distance en kilomètres
+    final distanceInKm = distanceInMeters / 1000;
+
+    return distanceInKm;
   }
 
   TextEditingController searchController = TextEditingController();
 
   Future<void> search() async {
+    if (clientLatitude == null || clientLongitude == null) {
+      // Afficher un message d'erreur ou retourner une valeur par défaut
+      return;
+    }
+
     final url =
         Uri.parse('http://10.0.2.2:9000/api/v1/auth/offre-service/$searchTerm');
 
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      List<dynamic> responseData = json.decode(response.body);
+      final responseData = json.decode(response.body) as List<dynamic>;
 
-      for (final artisan in responseData) {
+      final data = responseData.map((artisan) {
         final localisation = artisan['localisation'];
 
-        double artisanLatitude;
-        double artisanLongitude;
+        double? artisanLatitude;
+        double? artisanLongitude;
 
-        if (localisation != null &&
-            localisation != 'null' &&
-            localisation is Map) {
+        if (localisation != null && localisation is Map) {
           final latitude = localisation['latitude'];
           final longitude = localisation['longitude'];
           if (latitude != null && longitude != null) {
-            artisanLatitude = double.tryParse(latitude.toString()) ?? 0.0;
-            artisanLongitude = double.tryParse(longitude.toString()) ?? 0.0;
-            print(artisanLatitude);
-            print(artisanLongitude);
+            final latitudeStr = latitude.toString();
+            final longitudeStr = longitude.toString();
+
+            // Vérifier que les valeurs de latitude et longitude sont valides (peuvent être converties en double).
+            if (double.tryParse(latitudeStr) != null &&
+                double.tryParse(longitudeStr) != null) {
+              artisanLatitude = double.parse(latitudeStr);
+              artisanLongitude = double.parse(longitudeStr);
+              print('Latitude: $artisanLatitude, Longitude: $artisanLongitude');
+            } else {
+              print('Erreur de conversion de latitude ou longitude');
+            }
           } else {
             // Gérer le cas où latitude ou longitude sont nulles ici.
-            artisanLatitude = 0.0;
-            artisanLongitude = 0.0;
+            print('Latitude ou longitude nulle');
           }
         } else {
           // Gérer le cas où localisation est nulle ici.
-          artisanLatitude = 0.0;
-          artisanLongitude = 0.0;
+          print('Localisation nulle');
         }
 
         if (artisanLatitude != null && artisanLongitude != null) {
-          final artisanDistance =
-              calculateDistance(artisanLatitude, artisanLongitude);
+          final artisanDistance = calculateDistance(
+            clientLatitude!,
+            clientLongitude!,
+            artisanLatitude,
+            artisanLongitude,
+          );
 
           // Ajouter la distance à l'objet artisan
           artisan['distance'] = artisanDistance;
 
-          responseData.sort((a, b) => a['distance'].compareTo(b['distance']));
+          return artisan;
         } else {
-          // Gérer le cas où artisanLatitude ou artisanLongitude sont nuls ici.
-          artisan['distance'] = double.infinity;
+          // Gérer le cas où artisanLatitude ou artisanLongitude ne sont pas valides.
+          return {...artisan, 'distance': double.infinity};
         }
-      }
+      }).toList();
+
+      data.sort((a, b) => a['distance'].compareTo(b['distance']));
 
       setState(() {
-        data = responseData;
+        this.data = data;
         print(data);
       });
-    } else {
-      print("Erreur: ${response.statusCode}");
     }
   }
 
@@ -157,52 +196,63 @@ class _ResultatPageState extends State<ResultatPage> {
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      List<dynamic> responseData = json.decode(response.body);
+      final responseData = json.decode(response.body) as List<dynamic>;
 
-      for (final artisan in responseData) {
+      final data = responseData.map((artisan) {
         final localisation = artisan['localisation'];
-        double artisanLatitude;
-        double artisanLongitude;
+
+        double? artisanLatitude;
+        double? artisanLongitude;
 
         if (localisation != null && localisation is Map) {
           final latitude = localisation['latitude'];
           final longitude = localisation['longitude'];
           if (latitude != null && longitude != null) {
-            artisanLatitude = double.tryParse(latitude.toString()) ?? 0.0;
-            artisanLongitude = double.tryParse(longitude.toString()) ?? 0.0;
-            print(artisanLatitude);
-            print(artisanLongitude);
+            final latitudeStr = latitude.toString();
+            final longitudeStr = longitude.toString();
+
+            // Vérifier que les valeurs de latitude et longitude sont valides (peuvent être converties en double).
+            if (double.tryParse(latitudeStr) != null &&
+                double.tryParse(longitudeStr) != null) {
+              artisanLatitude = double.parse(latitudeStr);
+              artisanLongitude = double.parse(longitudeStr);
+              print('Latitude: $artisanLatitude, Longitude: $artisanLongitude');
+            } else {
+              print('Erreur de conversion de latitude ou longitude');
+            }
           } else {
             // Gérer le cas où latitude ou longitude sont nulles ici.
-            artisanLatitude = 0.0;
-            artisanLongitude = 0.0;
+            print('Latitude ou longitude nulle');
           }
         } else {
           // Gérer le cas où localisation est nulle ici.
-          artisanLatitude = 0.0;
-          artisanLongitude = 0.0;
+          print('Localisation nulle');
         }
 
         if (artisanLatitude != null && artisanLongitude != null) {
-          final artisanDistance =
-              calculateDistance(artisanLatitude, artisanLongitude);
+          final artisanDistance = calculateDistance(
+            clientLatitude!,
+            clientLongitude!,
+            artisanLatitude,
+            artisanLongitude,
+          );
 
           // Ajouter la distance à l'objet artisan
           artisan['distance'] = artisanDistance;
 
-          responseData.sort((a, b) => a['distance'].compareTo(b['distance']));
+          return artisan;
         } else {
-          // Gérer le cas où artisanLatitude ou artisanLongitude sont nuls ici.
-          artisan['distance'] = double.infinity;
+          // Gérer le cas où artisanLatitude ou artisanLongitude ne sont pas valides.
+          return {...artisan, 'distance': double.infinity};
         }
-      }
+      }).toList();
+
+      data.sort((a, b) => a['distance'].compareTo(b['distance']));
 
       setState(() {
-        data = responseData;
-
-        setState(() {
-          searchController.clear();
-        });
+        this.data = data;
+        print(data);
+        searchController.clear();
       });
     } else {
       print("Erreur: ${response.statusCode}");
@@ -254,17 +304,8 @@ class _ResultatPageState extends State<ResultatPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: data.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Aucun Résultat',
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    )
+              child: data.isEmpty || isLoading
+                  ? const Center(child: CircularProgressIndicator())
                   : ListView.builder(
                       itemCount: data.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -274,6 +315,8 @@ class _ResultatPageState extends State<ResultatPage> {
                         final artisanPhoto = artisan['photo_profil'];
                         final artisanServices = artisan['offreServices'];
                         final artisanPrestations = artisan['prestations'];
+                        final artisanDis = artisan['distance'];
+                        String km = artisanDis.toStringAsFixed(1);
                         final artisanPrestationService =
                             artisanPrestations[0]['id'];
                         final localisation = artisan['localisation'];
@@ -370,10 +413,21 @@ class _ResultatPageState extends State<ResultatPage> {
                                       ),
                                     );
                                   },
-                                  child: const Icon(
-                                    Icons.arrow_right,
-                                    size: 30,
-                                    color: Colors.black,
+                                  child: SizedBox(
+                                    width: 100,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          '$km km',
+                                        ),
+                                        const Icon(
+                                          Icons.arrow_right,
+                                          size: 30,
+                                          color: Colors.black,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

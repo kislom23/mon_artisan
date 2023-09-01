@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       if (response.statusCode == 200) {
         SharedPreferences preferences = await SharedPreferences.getInstance();
-        preferences.clear();
+        preferences.remove('token');
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const MyApp()),
