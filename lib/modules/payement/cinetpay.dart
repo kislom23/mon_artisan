@@ -63,11 +63,6 @@ class _CinetPayState extends State<CinetPay> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 50.0),
-              Text(
-                "Cart informations.",
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 50.0),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 margin: const EdgeInsets.symmetric(horizontal: 50.0),
@@ -86,7 +81,12 @@ class _CinetPayState extends State<CinetPay> {
               ),
               const SizedBox(height: 40.0),
               ElevatedButton(
-                child: const Text("Payez avec CinetPay"),
+                style: ElevatedButton.styleFrom(
+                    side: BorderSide.none, shape: const StadiumBorder()),
+                child: const Text(
+                  "Payez avec CinetPay",
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
                 onPressed: () async {
                   String amount = amountController.text;
                   if (amount.isEmpty) {
@@ -117,9 +117,11 @@ class _CinetPayState extends State<CinetPay> {
                       .toString(); // Mettre en place un endpoint à contacter côté serveur pour générer des ID unique dans votre BD
 
                   await Get.to(CinetPayCheckout(
-                    title: 'Payment Checkout',
+                    title: 'Payment',
                     titleStyle: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                     titleBackgroundColor: Colors.green,
                     configData: <String, dynamic>{
                       'apikey': '66623283664389d2a61b6a6.75178443',
