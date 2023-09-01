@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, avoid_print, file_names
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, avoid_print, file_names, avoid_function_literals_in_foreach_calls
 
 import 'dart:async';
 

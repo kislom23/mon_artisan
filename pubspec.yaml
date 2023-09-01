@@ -52,6 +52,8 @@ dependencies:
   google_maps_flutter: ^2.4.0
   flutter_polyline_points: ^2.0.0
   location: ^5.0.3
+  cinetpay: ^1.0.7
+  get: ^4.6.5
   
 
 dev_dependencies:

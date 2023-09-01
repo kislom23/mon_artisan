@@ -10,7 +10,8 @@
     <application
         android:label="Nye Dowolà"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <meta-data 
             android:name="com.google.android.geo.API_KEY" 
             android:value="AIzaSyCqaj8dP8JmwZ0Dki5mT-EvSyYr2dZBvkA"
@@ -44,4 +45,5 @@
             android:value="2" />
         
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
