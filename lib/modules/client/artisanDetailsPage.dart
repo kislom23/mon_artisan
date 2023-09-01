@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:nye_dowola/common/square_tile.dart';
 import 'package:nye_dowola/modules/client/mapPage.dart';
+import 'package:nye_dowola/modules/payement/cinetpay.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -428,7 +429,13 @@ class _DetailsPageState extends State<DetailsPage> {
                         width: 150,
                         height: 40,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => const CinetPay())),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                               side: BorderSide.none,
                               shape: const StadiumBorder()),

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 import 'dart:math';
 
@@ -6,17 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Future main() async {
-  runApp(const MyApp());
+  runApp(const CinetPay());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class CinetPay extends StatefulWidget {
+  const CinetPay({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  _CinetPayState createState() => _CinetPayState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _CinetPayState extends State<CinetPay> {
   TextEditingController amountController = TextEditingController();
   Map<String, dynamic>? response;
   Color? color;
@@ -67,7 +69,7 @@ class _MyAppState extends State<MyApp> {
                   const SizedBox(height: 50.0),
                   Text(
                     "Cart informations.",
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 50.0),
                   Container(
@@ -124,8 +126,8 @@ class _MyAppState extends State<MyApp> {
                             fontSize: 20, fontWeight: FontWeight.bold),
                         titleBackgroundColor: Colors.green,
                         configData: <String, dynamic>{
-                          'apikey': 'API_KEY',
-                          'site_id': int.parse("YOUR_SITE_ID"),
+                          'apikey': '66623283664389d2a61b6a6.75178443',
+                          'site_id': int.parse("312650"),
                           'notify_url': 'YOUR_NOTIFY_URL'
                         },
                         paymentData: <String, dynamic>{
