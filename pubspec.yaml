@@ -50,6 +50,8 @@ dependencies:
   image_picker: ^1.0.2
   map_location_picker: ^1.2.6
   google_maps_flutter: ^2.4.0
+  flutter_polyline_points: ^2.0.0
+  location: ^5.0.3
   
 
 dev_dependencies:

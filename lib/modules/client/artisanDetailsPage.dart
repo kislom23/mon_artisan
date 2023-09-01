@@ -1,14 +1,17 @@
-// ignore_for_file: file_names, unnecessary_null_comparison
+// ignore_for_file: file_names, unnecessary_null_comparison, avoid_print
 
+import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
+import 'package:http/http.dart' as http;
+import 'package:nye_dowola/common/square_tile.dart';
+import 'package:nye_dowola/modules/client/mapPage.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../common/square_tile.dart';
 
 class DetailsPage extends StatefulWidget {
   final String nom;
@@ -42,18 +45,71 @@ class DetailsPage extends StatefulWidget {
   State<DetailsPage> createState() => _DetailsPageState();
 }
 
+String nom = "";
+String comment = "";
+int nombreEtoiles = 1;
+int idSer = 1;
+
+final nomController = TextEditingController();
+final commentController = TextEditingController();
+
+Uri url = Uri.parse('http://10.0.2.2:9000/api/v1/no/note_service/ajouter');
+
+Future notez() async {
+  nom = nomController.text;
+  comment = commentController.text;
+
+  if (nom.isEmpty || comment.isEmpty) {
+    Fluttertoast.showToast(
+      msg: "Veuillez remplir tous les champs",
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16,
+    );
+    return;
+  }
+
+  var res = await http.post(
+    url,
+    headers: {'content-type': 'application/json'},
+    body: json.encode({
+      'nom_client': nom,
+      'commentaire': comment,
+      'etoile': nombreEtoiles,
+      'prestationSer': {
+        'id': idSer,
+      },
+    }),
+  );
+
+  if (res.statusCode == 200) {
+    Fluttertoast.showToast(
+      msg: "Artisan notez avec success",
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16,
+    );
+  } else {
+    Fluttertoast.showToast(
+      msg: "Erreur lors de la notation, ressayer plus tard",
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16,
+    );
+  }
+}
+
 Future openDialog(BuildContext context) => showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Remplissez'),
         content: SizedBox(
-          height: 250,
+          height: 300,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const TextField(
-                  decoration: InputDecoration(hintText: 'Entrer vôtre nom'),
+                TextField(
+                  controller: nomController,
+                  decoration:
+                      const InputDecoration(hintText: 'Entrer vôtre nom'),
                 ),
                 const SizedBox(
                   height: 20,
@@ -67,14 +123,18 @@ Future openDialog(BuildContext context) => showDialog(
                   itemPadding: const EdgeInsets.symmetric(horizontal: 4),
                   itemBuilder: (context, _) =>
                       const Icon(Icons.star, color: Colors.orange),
-                  onRatingUpdate: (index) {},
+                  onRatingUpdate: (index) {
+                    nombreEtoiles = index.toInt();
+                    print(nombreEtoiles);
+                  },
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                const TextField(
+                TextField(
+                  controller: commentController,
                   maxLines: 4,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Entrer vôtre commentaire',
                     border: OutlineInputBorder(),
                   ),
@@ -83,10 +143,13 @@ Future openDialog(BuildContext context) => showDialog(
             ),
           ),
         ),
-        actions: const [
+        actions: [
           TextButton(
-            onPressed: null,
-            child: Text(
+            onPressed: () {
+              notez();
+              Navigator.of(context).pop();
+            },
+            child: const Text(
               'Envoyer',
               style: TextStyle(fontSize: 20, color: Colors.orange),
             ),
@@ -98,188 +161,293 @@ Future openDialog(BuildContext context) => showDialog(
 class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          // ignore: sized_box_for_whitespace
-          Container(
-            width: double.infinity,
-            height: 250,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
               child: widget.photo != null
                   ? Image.memory(
                       widget.photo!,
                       fit: BoxFit.cover,
                     )
                   : const Image(
-                      image: AssetImage('assets/images/télécharger.png')),
+                      image: AssetImage('assets/images/7309681.jpg'),
+                    ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-
-          Center(
-            child: Text(
-              '${widget.nom} ${widget.prenom}',
-              style: GoogleFonts.poppins(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: ListTile(
-                  leading: Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.orange,
-                    ),
-                    child: const Icon(
-                      LineAwesomeIcons.envelope,
-                      color: Colors.white,
-                    ),
-                  ),
-                  title: Text(
-                    widget.email,
-                    style: GoogleFonts.poppins(fontSize: 12),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: ListTile(
-                  leading: Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.orange,
-                    ),
-                    child: const Icon(
-                      LineAwesomeIcons.phone,
-                      color: Colors.white,
-                    ),
-                  ),
-                  title: widget.numTelephone != null &&
-                          widget.numTelephone != 'null'
-                      ? Text(
-                          widget.numTelephone,
-                          style: GoogleFonts.poppins(fontSize: 15),
-                        )
-                      : Text(
-                          'Pas défini',
-                          style: GoogleFonts.poppins(fontSize: 15),
-                        ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Catégorie de service :   ',
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      widget.categorie,
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'Description : ${widget.description}',
-              style: GoogleFonts.poppins(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: 250,
-            height: 40,
-            child: ElevatedButton(
-              onPressed: () {
-                openDialog(context);
-              },
-              style: ElevatedButton.styleFrom(
-                  side: BorderSide.none, shape: const StadiumBorder()),
-              child: Text(
-                'Notez ${widget.prenom}',
-                style: GoogleFonts.poppins(fontSize: 15, color: Colors.white),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // google button
-              GestureDetector(
-                onTap: () {},
-                child: const SquareTile(imagePath: 'assets/images/map.png'),
-              ),
-
-              const SizedBox(width: 20),
-
-              GestureDetector(
-                onTap: () {
-                  String phoneNumber = widget.numTelephone;
-                  final Uri url = Uri.parse('tel:$phoneNumber');
-                  launchUrl(url);
-                },
-                child:
-                    const SquareTile(imagePath: 'assets/images/phone-call.png'),
-              ),
-
-              const SizedBox(width: 20),
-
-              // apple button
-              GestureDetector(
-                onTap: () {
-                  String phoneNumber = widget.numTelephone;
-                  final Uri url = Uri.parse('https://wa.me/$phoneNumber');
-                  launchUrl(url);
-                },
-                child:
-                    const SquareTile(imagePath: 'assets/images/whatsapp.png'),
-              )
-            ],
-          ),
-        ],
+            buttonArrow(context),
+            scroll(),
+          ],
+        ),
       ),
     );
+  }
+
+  buttonArrow(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          height: 55,
+          width: 55,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              height: 55,
+              width: 55,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: const Icon(Icons.arrow_back_ios,
+                  size: 20, color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  scroll() {
+    return DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        maxChildSize: 1.0,
+        minChildSize: 0.7,
+        builder: (context, scrollController) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            clipBehavior: Clip.hardEdge,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            ),
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 5,
+                          width: 35,
+                          color: Colors.black12,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    '${widget.nom} ${widget.prenom}',
+                    style: GoogleFonts.poppins(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    widget.categorie,
+                    style: GoogleFonts.poppins(color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.orange,
+                        child: Icon(
+                          Icons.email,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        widget.email,
+                        style: GoogleFonts.poppins(color: Colors.black),
+                      ),
+                      const Spacer(),
+                      const CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.orange,
+                        child: Icon(
+                          Icons.phone,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      widget.numTelephone != null &&
+                              widget.numTelephone != 'null'
+                          ? Text(
+                              widget.numTelephone,
+                            )
+                          : Text(
+                              'Pas défini',
+                              style: GoogleFonts.poppins(),
+                            ),
+                    ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: Divider(
+                      color: Colors.grey,
+                      height: 4,
+                    ),
+                  ),
+                  Text(
+                    "Description",
+                    style: GoogleFonts.poppins(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    widget.description,
+                    style: GoogleFonts.poppins(),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: Divider(
+                      color: Colors.grey,
+                      height: 4,
+                    ),
+                  ),
+                  Text(
+                    "Opérations",
+                    style: GoogleFonts.poppins(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // google button
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => MapPage(
+                                    artLon: widget.longitude,
+                                    artLat: widget.latitude))),
+                          );
+                        },
+                        child: const SquareTile(
+                            imagePath: 'assets/images/map.png'),
+                      ),
+
+                      const SizedBox(width: 20),
+
+                      GestureDetector(
+                        onTap: () {
+                          String phoneNumber = widget.numTelephone;
+                          final Uri url = Uri.parse('tel:$phoneNumber');
+                          launchUrl(url);
+                        },
+                        child: const SquareTile(
+                            imagePath: 'assets/images/phone-call.png'),
+                      ),
+
+                      const SizedBox(width: 20),
+
+                      // apple button
+                      GestureDetector(
+                        onTap: () {
+                          String phoneNumber = widget.numTelephone;
+                          final Uri url =
+                              Uri.parse('https://wa.me/$phoneNumber');
+                          launchUrl(url);
+                        },
+                        child: const SquareTile(
+                            imagePath: 'assets/images/whatsapp.png'),
+                      )
+                    ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    child: Divider(
+                      color: Colors.grey,
+                      height: 4,
+                    ),
+                  ),
+                  Text(
+                    "Plus",
+                    style: GoogleFonts.poppins(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              idSer = widget.prestationService;
+                            });
+                            print(idSer);
+                            openDialog(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide.none,
+                              shape: const StadiumBorder()),
+                          child: Text(
+                            'Notez ${widget.prenom}',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      SizedBox(
+                        width: 150,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            openDialog(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide.none,
+                              shape: const StadiumBorder()),
+                          child: Text(
+                            'Payez ${widget.prenom}',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
