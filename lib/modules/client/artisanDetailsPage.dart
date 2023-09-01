@@ -87,6 +87,8 @@ Future notez() async {
       gravity: ToastGravity.BOTTOM,
       fontSize: 16,
     );
+    nomController.clear();
+    commentController.clear();
   } else {
     Fluttertoast.showToast(
       msg: "Erreur lors de la notation, ressayer plus tard",
@@ -426,9 +428,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         width: 150,
                         height: 40,
                         child: ElevatedButton(
-                          onPressed: () {
-                            openDialog(context);
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                               side: BorderSide.none,
                               shape: const StadiumBorder()),

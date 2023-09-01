@@ -304,140 +304,151 @@ class _ResultatPageState extends State<ResultatPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: data.isEmpty || isLoading
+              child: isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final artisan = data[index];
-                        final artisanName = artisan['nom'];
-                        final artisanPrenom = artisan['prenom'];
-                        final artisanPhoto = artisan['photo_profil'];
-                        final artisanServices = artisan['offreServices'];
-                        final artisanPrestations = artisan['prestations'];
-                        final artisanDis = artisan['distance'];
-                        String km = artisanDis.toStringAsFixed(1);
-                        final artisanPrestationService =
-                            artisanPrestations[0]['id'];
-                        final localisation = artisan['localisation'];
-                        print(localisation);
+                  : data.isEmpty
+                      ? Center(
+                          child: Text(
+                          "Aucune donnée à afficher",
+                          style: GoogleFonts.poppins(fontSize: 15),
+                        ))
+                      : ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final artisan = data[index];
+                            final artisanName = artisan['nom'];
+                            final artisanPrenom = artisan['prenom'];
+                            final artisanPhoto = artisan['photo_profil'];
+                            final artisanServices = artisan['offreServices'];
+                            final artisanPrestations = artisan['prestations'];
+                            final artisanDis = artisan['distance'];
+                            String km = artisanDis.toStringAsFixed(1);
+                            final artisanPrestationService =
+                                artisanPrestations[0]['id'];
+                            final localisation = artisan['localisation'];
+                            print(localisation);
 
-                        String artisanLatitude = '0.0';
-                        String artisanLongitude = '0.0';
-                        if (localisation != null && localisation is Map) {
-                          artisanLatitude = localisation['latitude'].toString();
-                          artisanLongitude =
-                              localisation['longitude'].toString();
-                        }
-
-                        Uint8List? photoProfil;
-
-                        if (artisanPhoto != null) {
-                          photoProfil =
-                              Uint8List.fromList(base64Decode(artisanPhoto));
-                        }
-
-                        for (var service in artisanServices) {
-                          if (service != null &&
-                              service is Map &&
-                              service['nomDuService'] != null &&
-                              service['nomDuService']
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchTerm.toLowerCase())) {
-                            final serviceName =
-                                service['nomDuService'].toString();
-                            final categorieService =
-                                service['categorieDeService'];
-
-                            String categorie = "";
-                            if (categorieService != null &&
-                                categorieService['categorieService'] != null) {
-                              categorie = categorieService['categorieService'];
+                            String artisanLatitude = '0.0';
+                            String artisanLongitude = '0.0';
+                            if (localisation != null && localisation is Map) {
+                              artisanLatitude =
+                                  localisation['latitude'].toString();
+                              artisanLongitude =
+                                  localisation['longitude'].toString();
                             }
 
-                            return Card(
-                              color: Colors.white,
-                              elevation: 1.0,
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(60),
-                                      child: photoProfil != null
-                                          ? Image.memory(
-                                              photoProfil,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : const Image(
-                                              image: AssetImage(
-                                                  'assets/images/LOGO-01.png')),
-                                    )),
-                                title: Text(
-                                  '$artisanName $artisanPrenom',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  serviceName,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                trailing: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) => DetailsPage(
-                                              prestationService:
-                                                  artisanPrestationService,
-                                              photo: photoProfil,
-                                              nom: artisanName,
-                                              prenom: artisanPrenom,
-                                              email: artisan['email'],
-                                              numTelephone:
-                                                  artisan['num_telephone']
-                                                      .toString(),
-                                              nomDuService:
-                                                  service['nomDuService'],
-                                              categorie: categorie,
-                                              latitude: artisanLatitude,
-                                              longitude: artisanLongitude,
-                                              description: service[
-                                                  'descriptionDuService'],
-                                            )),
+                            Uint8List? photoProfil;
+
+                            if (artisanPhoto != null) {
+                              photoProfil = Uint8List.fromList(
+                                  base64Decode(artisanPhoto));
+                            }
+
+                            for (var service in artisanServices) {
+                              if (service != null &&
+                                  service is Map &&
+                                  service['nomDuService'] != null &&
+                                  service['nomDuService']
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchTerm.toLowerCase())) {
+                                final serviceName =
+                                    service['nomDuService'].toString();
+                                final categorieService =
+                                    service['categorieDeService'];
+
+                                String categorie = "";
+                                if (categorieService != null &&
+                                    categorieService['categorieService'] !=
+                                        null) {
+                                  categorie =
+                                      categorieService['categorieService'];
+                                }
+
+                                return Card(
+                                  color: Colors.white,
+                                  elevation: 1.0,
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                        backgroundColor: Colors.transparent,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          child: photoProfil != null
+                                              ? Image.memory(
+                                                  photoProfil,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : const Image(
+                                                  image: AssetImage(
+                                                      'assets/images/LOGO-01.png')),
+                                        )),
+                                    title: Text(
+                                      '$artisanName $artisanPrenom',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
                                       ),
-                                    );
-                                  },
-                                  child: SizedBox(
-                                    width: 100,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          '$km km',
+                                    ),
+                                    subtitle: Text(
+                                      serviceName,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: ((context) => DetailsPage(
+                                                  prestationService:
+                                                      artisanPrestationService,
+                                                  photo: photoProfil,
+                                                  nom: artisanName,
+                                                  prenom: artisanPrenom,
+                                                  email: artisan['email'],
+                                                  numTelephone:
+                                                      artisan['num_telephone']
+                                                          .toString(),
+                                                  nomDuService:
+                                                      service['nomDuService'],
+                                                  categorie: categorie,
+                                                  latitude: artisanLatitude,
+                                                  longitude: artisanLongitude,
+                                                  description: service[
+                                                      'descriptionDuService'],
+                                                )),
+                                          ),
+                                        );
+                                      },
+                                      child: SizedBox(
+                                        width: 100,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              '$km km',
+                                            ),
+                                            const Icon(
+                                              Icons.arrow_right,
+                                              size: 30,
+                                              color: Colors.black,
+                                            ),
+                                          ],
                                         ),
-                                        const Icon(
-                                          Icons.arrow_right,
-                                          size: 30,
-                                          color: Colors.black,
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                        // Si aucun service ne correspond à la recherche pour cet artisan, on retourne un widget vide
-                        return const SizedBox.shrink();
-                      },
-                    ),
+                                );
+                              }
+                            }
+                            // Si aucun service ne correspond à la recherche pour cet artisan, on retourne un widget vide
+                            return const SizedBox.shrink();
+                          },
+                        ),
             ),
           ),
         ],

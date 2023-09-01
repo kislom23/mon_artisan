@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:location/location.dart' as lot;
 import 'package:map_location_picker/map_location_picker.dart';
 
 class MapPage extends StatefulWidget {
@@ -22,15 +21,12 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     getPosition();
-    getCurrentLocation();
     getPolyPoints();
   }
 
-  final Completer<GoogleMapController> _controller = Completer();
-
   LatLng sourceLocation = const LatLng(6.2006, 1.2003);
 
-  LatLng destination = const LatLng(0, 0);
+  LatLng destination = const LatLng(6.2678, 1.7687);
 
   Future<void> getPosition() async {
     double latitude = double.parse(widget.artLat);
@@ -66,39 +62,6 @@ class _MapPageState extends State<MapPage> {
 
   List<LatLng> polylineCoordinates = [];
 
-  lot.LocationData? currentLocation;
-
-  void getCurrentLocation() async {
-    lot.Location location = lot.Location();
-
-    location.getLocation().then(
-      (location) {
-        currentLocation = location;
-      },
-    );
-
-    GoogleMapController googleMapController = await _controller.future;
-
-    location.onLocationChanged.listen(
-      (newLoc) {
-        currentLocation = newLoc;
-
-        googleMapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: LatLng(
-                newLoc.latitude!,
-                newLoc.longitude!,
-              ),
-            ),
-          ),
-        );
-
-        setState(() {});
-      },
-    );
-  }
-
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -108,11 +71,9 @@ class _MapPageState extends State<MapPage> {
     );
 
     if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) => polylineCoordinates.add(
-          LatLng(point.latitude, point.longitude),
-        ),
-      );
+      result.points.forEach((PointLatLng point) => polylineCoordinates.add(
+            LatLng(point.latitude, point.longitude),
+          ));
       setState(() {});
     }
   }
@@ -120,43 +81,30 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: currentLocation == null
-          ? const Center(
-              child: Text("Chargement"),
-            )
-          : GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(
-                    currentLocation!.latitude!, currentLocation!.longitude!),
-                zoom: 14.5,
-              ),
-              polylines: {
-                Polyline(
-                  polylineId: const PolylineId("route"),
-                  points: polylineCoordinates,
-                  color: Colors.orange,
-                  width: 6,
-                )
-              },
-              markers: {
-                Marker(
-                  markerId: const MarkerId("source"),
-                  position: LatLng(
-                      currentLocation!.latitude!, currentLocation!.longitude!),
-                ),
-                Marker(
-                  markerId: const MarkerId("source"),
-                  position: sourceLocation,
-                ),
-                Marker(
-                  markerId: const MarkerId("destination"),
-                  position: destination,
-                ),
-              },
-              onMapCreated: (mapController) {
-                _controller.complete(mapController);
-              },
-            ),
+      body: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: sourceLocation,
+          zoom: 13.5,
+        ),
+        polylines: {
+          Polyline(
+            polylineId: const PolylineId("route"),
+            points: polylineCoordinates,
+            color: Colors.orange,
+            width: 6,
+          )
+        },
+        markers: {
+          Marker(
+            markerId: const MarkerId("source"),
+            position: sourceLocation,
+          ),
+          Marker(
+            markerId: const MarkerId("destination"),
+            position: destination,
+          ),
+        },
+      ),
     );
   }
 }
