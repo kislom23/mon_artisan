@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:map_location_picker/map_location_picker.dart';
+import 'package:nye_dowola/common/route.dart';
 import 'package:nye_dowola/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,7 +62,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> fetchData() async {
-    final url = Uri.parse('http://10.0.2.2:9000/api/v1/qu/quartiers');
+    final url = Uri.parse('$urlServer/api/v1/qu/quartiers');
     final response = await http.get(
       url,
       headers: {
@@ -98,7 +99,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _telephoneController = TextEditingController();
 
-  final url = Uri.parse('http://10.0.2.2:9000/api/v1/auth/artisan/modifier');
+  final url = Uri.parse('$urlServer/api/v1/auth/artisan/modifier');
 
   String adresseMap = '';
   String longitudeMap = '';

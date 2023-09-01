@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:nye_dowola/common/route.dart';
 import 'package:nye_dowola/modules/client/artisanDetailsPage.dart';
 
 class ResultatPage extends StatefulWidget {
@@ -191,7 +192,7 @@ class _ResultatPageState extends State<ResultatPage> {
     print(term);
 
     final url =
-        Uri.parse('http://10.0.2.2:9000/api/v1/auth/offre-service/$term');
+        Uri.parse('$urlServer/api/v1/auth/offre-service/$term');
 
     final response = await http.get(url);
 

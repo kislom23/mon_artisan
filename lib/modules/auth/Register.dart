@@ -12,6 +12,8 @@ import 'package:nye_dowola/modules/auth/Login.dart';
 import 'package:nye_dowola/modules/auth/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../common/route.dart';
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key});
 
@@ -35,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> fetchData() async {
-    final url = Uri.parse('http://10.0.2.2:9000/api/v1/of/offreServices');
+    final url = Uri.parse('$urlServer/api/v1/of/offreServices');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -68,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final prenomController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  Uri url = Uri.parse('http://10.0.2.2:9000/api/v1/auth/artisan/ajout');
+  Uri url = Uri.parse('$urlServer/api/v1/auth/artisan/ajout');
 
   Future registerUser() async {
     user.nom = nomController.text;

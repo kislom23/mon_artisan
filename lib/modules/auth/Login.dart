@@ -12,6 +12,8 @@ import 'package:nye_dowola/modules/auth/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../common/route.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key});
 
@@ -25,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  Uri url = Uri.parse('http://10.0.2.2:9000/api/v1/auth/login');
+  Uri url = Uri.parse('$urlServer/api/v1/auth/login');
 
   // sign user in method
   Future signUserIn() async {

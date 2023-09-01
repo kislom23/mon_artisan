@@ -10,6 +10,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:nye_dowola/common/route.dart';
 import 'package:nye_dowola/common/square_tile.dart';
 import 'package:nye_dowola/modules/client/mapPage.dart';
 import 'package:nye_dowola/modules/payement/cinetpay.dart';
@@ -55,7 +56,7 @@ int idSer = 1;
 final nomController = TextEditingController();
 final commentController = TextEditingController();
 
-Uri url = Uri.parse('http://10.0.2.2:9000/api/v1/no/note_service/ajouter');
+Uri url = Uri.parse('$urlServer/api/v1/no/note_service/ajouter');
 
 Future notez() async {
   nom = nomController.text;

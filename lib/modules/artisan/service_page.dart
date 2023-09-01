@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
+import 'package:nye_dowola/common/route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ServicePage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _ServicePageState extends State<ServicePage> {
   }
 
   Future<void> offreServiceList() async {
-    final url = Uri.parse('http://10.0.2.2:9000/api/v1/of/offreServices');
+    final url = Uri.parse('$urlServer/api/v1/of/offreServices');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -56,7 +57,7 @@ class _ServicePageState extends State<ServicePage> {
   }
 
   Future<void> fetchData() async {
-    final url = Uri.parse('http://10.0.2.2:9000/api/v1/of/artoffre');
+    final url = Uri.parse('$urlServer/api/v1/of/artoffre');
 
     final response = await http.get(
       url,
@@ -125,8 +126,7 @@ class _ServicePageState extends State<ServicePage> {
   }
 
   Future addUserService() async {
-    final url2 =
-        Uri.parse('http://10.0.2.2:9000/api/v1/auth/ajout/offre-service');
+    final url2 = Uri.parse('$urlServer/api/v1/auth/ajout/offre-service');
 
     var res = await http.post(
       url2,
@@ -149,8 +149,7 @@ class _ServicePageState extends State<ServicePage> {
   }
 
   Future deleteUserService(String userServiceName) async {
-    final urlDel =
-        Uri.parse('http://10.0.2.2:9000/api/v1/auth/$userServiceName/artisan');
+    final urlDel = Uri.parse('$urlServer/api/v1/auth/$userServiceName/artisan');
 
     var res = await http.delete(
       urlDel,

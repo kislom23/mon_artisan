@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:modern_form_line_awesome_icons/modern_form_line_awesome_icons.dart';
+import 'package:nye_dowola/common/route.dart';
 import 'package:nye_dowola/main.dart';
 import 'package:nye_dowola/modules/artisan/editProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _logout() async {
-    String url = 'http://10.0.2.2:9000/api/v1/auth/logout';
+    String url = '$urlServer/api/v1/auth/logout';
 
     try {
       http.Response response = await http.post(
@@ -82,8 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String userEmail = '';
 
   Future<void> getEmail() async {
-    final url = Uri.parse(
-        'http://10.0.2.2:9000/api/v1/auth/email-utilisateur-connecte');
+    final url = Uri.parse('$urlServer/api/v1/auth/email-utilisateur-connecte');
 
     final response = await http.get(
       url,
@@ -111,8 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Uint8List? photoProfile;
 
   Future<void> fetchData() async {
-    final url =
-        Uri.parse('http://10.0.2.2:9000/api/v1/auth/artisand/$userEmail');
+    final url = Uri.parse('$urlServer/api/v1/auth/artisand/$userEmail');
 
     final response = await http.get(
       url,
