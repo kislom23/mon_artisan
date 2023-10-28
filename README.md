@@ -1,6 +1,6 @@
 # mon_artisan
 
-A new Flutter project.
+Application de location de services d'artisan
 
 ## Getting Started
 
