@@ -121,8 +121,7 @@ class _ResultatPageState extends State<ResultatPage> {
       return;
     }
 
-    final url =
-        Uri.parse('http://10.0.2.2:9000/api/v1/auth/offre-service/$searchTerm');
+    final url = Uri.parse('$urlServer/api/v1/auth/offre-service/$searchTerm');
 
     final response = await http.get(url);
 
@@ -191,8 +190,7 @@ class _ResultatPageState extends State<ResultatPage> {
     String term = searchController.text;
     print(term);
 
-    final url =
-        Uri.parse('$urlServer/api/v1/auth/offre-service/$term');
+    final url = Uri.parse('$urlServer/api/v1/auth/offre-service/$term');
 
     final response = await http.get(url);
 

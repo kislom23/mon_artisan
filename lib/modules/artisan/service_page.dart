@@ -81,9 +81,17 @@ class _ServicePageState extends State<ServicePage> {
 
   String userOffreService = "";
 
-  void _addService() {
-    offreServices.sort((a, b) =>
-        a['nomDuService'].toString().compareTo(b['nomDuService'].toString()));
+  void _addService() async {
+    await offreServiceList();
+    offreServices.sort((a, b) {
+      if (a is Map && b is Map) {
+        final nomDuServiceA = a['nomDuService'] ?? '';
+        final nomDuServiceB = b['nomDuService'] ?? '';
+        return nomDuServiceA.toString().compareTo(nomDuServiceB.toString());
+      }
+      return 0; // Par défaut, retournez 0 si les éléments ne sont pas des Map valides.
+    });
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
