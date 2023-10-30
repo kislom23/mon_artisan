@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+//import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -362,10 +362,10 @@ class _DetailsPageState extends State<DetailsPage> {
                       const SizedBox(width: 20),
 
                       GestureDetector(
-                        onTap: () async {
+                        /*onTap: () async {
                           String phoneNumber = widget.numTelephone;
                           FlutterPhoneDirectCaller.callNumber(phoneNumber);
-                        },
+                        },*/
                         child: const SquareTile(
                             imagePath: 'assets/images/phone-call.png'),
                       ),

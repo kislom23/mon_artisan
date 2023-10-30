@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nye_dowola/common/my_button.dart';
 import 'package:nye_dowola/common/my_textfield.dart';
-import 'package:nye_dowola/common/square_tile.dart';
 import 'package:nye_dowola/modules/auth/Register.dart';
 import 'package:nye_dowola/modules/auth/user.dart';
 import 'package:http/http.dart' as http;
@@ -73,8 +72,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/back.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -104,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: emailController,
                     hintText: 'Email',
                     obscureText: false,
+                    icon: const Icon(Icons.email),
                     onChanged: (value) {
                       user.email = value;
                     }),
@@ -115,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: passwordController,
                   hintText: 'Mot de passe',
                   obscureText: true,
+                  icon: const Icon(Icons.password),
                   onChanged: (value) {
                     user.password = value;
                   },
@@ -145,54 +152,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 20),
 
-                // or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Ou continuer avec',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontFamily: 'poppins',
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                // google + apple sign in buttons
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // google button
-                    SquareTile(imagePath: 'assets/images/google.png'),
-
-                    SizedBox(width: 10),
-
-                    // apple button
-                    SquareTile(imagePath: 'assets/images/apple-logo.png')
-                  ],
-                ),
-
-                const SizedBox(height: 20),
                 // not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

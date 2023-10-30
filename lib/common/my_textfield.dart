@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyTextField extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
   final controller;
+  final icon;
   final String hintText;
   final bool obscureText;
 
@@ -13,6 +15,7 @@ class MyTextField extends StatelessWidget {
     required this.hintText,
     required this.obscureText,
     required Null Function(dynamic value) onChanged,
+    this.icon,
   });
 
   @override
@@ -23,11 +26,16 @@ class MyTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
+            prefixIcon: icon,
             enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
+              borderSide: BorderSide(
+                  color: Colors
+                      .white), // Bordure quand le champ n'est pas en focus
             ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Colors
+                      .orange.shade300), // Bordure quand le champ est en focus
             ),
             fillColor: Colors.grey.shade200,
             filled: true,
