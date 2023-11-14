@@ -287,7 +287,7 @@ class _ResultatPageState extends State<ResultatPage> {
                         borderRadius: BorderRadius.circular(8.0),
                         borderSide: BorderSide.none,
                       ),
-                      hintText: "Quel service avez besoin ?",
+                      hintText: "Entrer le service recherché",
                       prefixIcon: const Icon(Icons.search),
                       prefixIconColor: Colors.orange,
                     ),
@@ -372,15 +372,25 @@ class _ResultatPageState extends State<ResultatPage> {
                                         backgroundColor: Colors.transparent,
                                         child: ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(50),
+                                              BorderRadius.circular(100),
                                           child: photoProfil != null
                                               ? Image.memory(
                                                   photoProfil,
+                                                  width: 200,
+                                                  height: 200,
                                                   fit: BoxFit.cover,
                                                 )
-                                              : const Image(
-                                                  image: AssetImage(
-                                                      'assets/images/LOGO-01.png')),
+                                              : ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100),
+                                                  child: const Image(
+                                                      width: 200,
+                                                      fit: BoxFit.cover,
+                                                      height: 200,
+                                                      image: AssetImage(
+                                                          'assets/images/7309681.jpg')),
+                                                ),
                                         )),
                                     title: Text(
                                       '$artisanName $artisanPrenom',
@@ -429,7 +439,13 @@ class _ResultatPageState extends State<ResultatPage> {
                                               MainAxisAlignment.end,
                                           children: [
                                             Text(
-                                              '$km km',
+                                              double.tryParse(km) != null &&
+                                                      double.parse(km).isFinite
+                                                  ? '$km km'
+                                                  : 'Très loin',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 13,
+                                              ),
                                             ),
                                             const Icon(
                                               Icons.arrow_right,

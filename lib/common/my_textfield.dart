@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 class MyTextField extends StatelessWidget {
   final controller;
   final icon;
+  final icon2;
   final String hintText;
   final bool obscureText;
 
@@ -16,6 +17,7 @@ class MyTextField extends StatelessWidget {
     required this.obscureText,
     required Null Function(dynamic value) onChanged,
     this.icon,
+    this.icon2,
   });
 
   @override
@@ -27,15 +29,14 @@ class MyTextField extends StatelessWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
             prefixIcon: icon,
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: Colors
-                      .white), // Bordure quand le champ n'est pas en focus
+            suffixIcon: icon2,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(color: Colors.white),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: Colors
-                      .orange.shade300), // Bordure quand le champ est en focus
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(color: Colors.transparent),
             ),
             fillColor: Colors.grey.shade200,
             filled: true,

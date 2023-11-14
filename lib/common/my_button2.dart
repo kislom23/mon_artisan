@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyButton2 extends StatelessWidget {
   final Function()? onTap;
@@ -16,11 +17,10 @@ class MyButton2 extends StatelessWidget {
           color: Colors.orange,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             "S'inscrire",
-            style: TextStyle(
-              fontFamily: 'poppins',
+            style: GoogleFonts.poppins(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,

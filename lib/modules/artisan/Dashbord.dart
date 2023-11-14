@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, sized_box_for_whitespace, use_build_context_synchronously, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashbordPage extends StatefulWidget {
@@ -124,7 +125,7 @@ class _DashbordPageState extends State<DashbordPage> {
           child: Column(children: [
             Container(
               decoration: const BoxDecoration(),
-              height: height * 0.35,
+              height: height * 0.25,
               width: width,
               child: Column(
                 children: [
@@ -159,9 +160,9 @@ class _DashbordPageState extends State<DashbordPage> {
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      top: 35,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 15,
                       left: 15,
                       right: 15,
                     ),
@@ -171,17 +172,17 @@ class _DashbordPageState extends State<DashbordPage> {
                       children: [
                         Text(
                           'Tableau de bord',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             fontSize: 30,
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
                             letterSpacing: 1,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
-                          'Mis à jour: 2 Sept 2023',
-                          style: TextStyle(
+                          'NYE DOWOLA 1.0',
+                          style: GoogleFonts.poppins(
                             fontSize: 16,
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
@@ -199,17 +200,17 @@ class _DashbordPageState extends State<DashbordPage> {
                 decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
                     )),
                 height: height,
                 width: width,
                 child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                      crossAxisCount: 4,
                       childAspectRatio: 1.1,
-                      mainAxisSpacing: 25,
+                      mainAxisSpacing: 15,
                     ),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -218,12 +219,12 @@ class _DashbordPageState extends State<DashbordPage> {
                       return InkWell(
                         onTap: () {},
                         child: Container(
-                          width: 50,
-                          height: 50,
+                          width: 40,
+                          height: 40,
                           margin: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 20),
+                              vertical: 10, horizontal: 10),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
                             boxShadow: const [
                               BoxShadow(
@@ -238,12 +239,12 @@ class _DashbordPageState extends State<DashbordPage> {
                             children: [
                               Image.asset(
                                 imgSrc[index],
-                                width: 100,
+                                width: 40,
                               ),
                               Text(
                                 titles[index],
-                                style: const TextStyle(
-                                  fontSize: 20,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
