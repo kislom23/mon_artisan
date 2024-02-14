@@ -2,6 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<key>GOOGLE_MAPS_API_KEY</key>
+		<string>AIzaSyCqaj8dP8JmwZ0Dki5mT-EvSyYr2dZBvkA</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>NYE DOWOLA souhaite avoir accès à votre localisation</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>NYE DOWOLA souhaite avoir accès à votre localisation</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>NYE DOWOLA souhaite avoir accès à photos</string>
+		<key>NSCameraUsageDescription</key>
+		<string>NYE DOWOLA souhaite avoir accès à l'appareil photo</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>NYE DOWOLA souhaite avoir accès au microphone</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>

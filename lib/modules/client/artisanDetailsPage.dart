@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+//import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -104,7 +104,7 @@ Future notez() async {
 Future openDialog(BuildContext context) => showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Remplissez'),
+        title: const Text('Remplissez '),
         content: SizedBox(
           height: 300,
           child: SingleChildScrollView(
@@ -282,9 +282,12 @@ class _DetailsPageState extends State<DetailsPage> {
                       const SizedBox(
                         width: 5,
                       ),
-                      Text(
-                        widget.email,
-                        style: GoogleFonts.poppins(color: Colors.black),
+                      Expanded(
+                        flex: 5,
+                        child: Text(
+                          widget.email,
+                          style: GoogleFonts.poppins(color: Colors.black),
+                        ),
                       ),
                       const Spacer(),
                       const CircleAvatar(
@@ -363,8 +366,17 @@ class _DetailsPageState extends State<DetailsPage> {
 
                       GestureDetector(
                         onTap: () async {
-                          String phoneNumber = widget.numTelephone;
-                          FlutterPhoneDirectCaller.callNumber(phoneNumber);
+                          /*String phoneNumber = widget.numTelephone;
+                          if (phoneNumber == null || phoneNumber == "null") {
+                            Fluttertoast.showToast(
+                              msg: "L'artisan n'a pas mis à jour son profil",
+                              gravity: ToastGravity.BOTTOM,
+                              fontSize: 16,
+                            );
+                          }else{
+                            FlutterPhoneDirectCaller.callNumber(phoneNumber);
+                          }
+                          */
                         },
                         child: const SquareTile(
                             imagePath: 'assets/images/phone-call.png'),
@@ -376,9 +388,17 @@ class _DetailsPageState extends State<DetailsPage> {
                       GestureDetector(
                         onTap: () {
                           String phoneNumber = widget.numTelephone;
-                          final Uri url =
-                              Uri.parse('https://wa.me/$phoneNumber');
-                          launchUrl(url);
+                          if (phoneNumber == null || phoneNumber == "null") {
+                            Fluttertoast.showToast(
+                              msg: "L'artisan n'a pas mis à jour son profil",
+                              gravity: ToastGravity.BOTTOM,
+                              fontSize: 16,
+                            );
+                          } else {
+                            final Uri url =
+                                Uri.parse('https://wa.me/$phoneNumber');
+                            launchUrl(url);
+                          }
                         },
                         child: const SquareTile(
                             imagePath: 'assets/images/whatsapp.png'),

@@ -1,10 +1,12 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
+// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers, avoid_print
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nye_dowola/modules/auth/Register.dart';
 import 'package:nye_dowola/modules/client/resultat_recherche.dart';
+import 'package:nye_dowola/screens/components/categories_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../modules/auth/Login.dart';
@@ -80,7 +82,7 @@ class _HomeState extends State<Home> {
             //slider select
             Positioned(
               bottom: 5,
-              top: 10,
+              top: 15,
               left: 0,
               right: 0,
               child: Row(
@@ -112,18 +114,29 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Container(
                 height: 40,
-                child: const Column(children: [
+                child: Column(children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                          child: Text(
-                        'Services',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          fontFamily: 'Poppins',
+                        child: Text(
+                          'Categories',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
-                      )),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Text(
+                          'Tout voir >',
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ]),
@@ -131,140 +144,26 @@ class _HomeState extends State<Home> {
             ),
             //Services card
             Container(
-              height: 130,
+              height: 100,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color.fromARGB(255, 228, 228, 228)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Image(
-                              image: AssetImage('assets/images/balai.png'),
-                              height: 40,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Nettoyage",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 17,
-                                  color: const Color.fromARGB(255, 46, 33, 82)
-                                      .withOpacity(0.9),
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color.fromARGB(255, 228, 228, 228)),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image(
-                              image: AssetImage('assets/images/parametres.png'),
-                              height: 40,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Dépannage",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 17,
-                                  color: Color.fromARGB(255, 46, 33, 82),
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color.fromARGB(255, 228, 228, 228)),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image(
-                              image: AssetImage(
-                                  'assets/images/rouleau-de-peinture.png'),
-                              height: 40,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Peinture",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 17,
-                                  color: Color.fromARGB(255, 46, 33, 82),
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color.fromARGB(255, 228, 228, 228)),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image(
-                              image: AssetImage('assets/images/plomberie.png'),
-                              height: 40,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Plomberie",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 17,
-                                  color: Color.fromARGB(255, 46, 33, 82),
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  CustomCard(
+                      text: "Artisanat",
+                      imagePath: "assets/images/pottery.png",
+                      onTap: () {}),
+                  CustomCard(
+                      text: "Bâtiment",
+                      imagePath: "assets/images/skyline.png",
+                      onTap: () {}),
+                  CustomCard(
+                      text: "Alimentation",
+                      imagePath: "assets/images/wheat.png",
+                      onTap: () {}),
+                  CustomCard(
+                      text: "Commerce",
+                      imagePath: "assets/images/store.png",
+                      onTap: () {})
                 ],
               ),
             ),
@@ -295,7 +194,7 @@ class _HomeState extends State<Home> {
             ),
             //Recommend user
             Container(
-              height: 270,
+              height: 260,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
@@ -304,7 +203,7 @@ class _HomeState extends State<Home> {
                     child: InkWell(
                       onTap: () {},
                       child: Container(
-                        width: 180,
+                        width: 150,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: const Color.fromARGB(255, 228, 228, 228),
@@ -322,23 +221,24 @@ class _HomeState extends State<Home> {
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.asset(
                                       "assets/images/Profil_artisan_contenu_btp-1024x683.jpg",
-                                      height: 120,
+                                      height: 100,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
                               ),
-                              const Text(
+                              Text(
                                 "John DOE",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Poppins'),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              const Text(
+                              Text(
                                 "Lomé - Vakpossito",
-                                style: TextStyle(
-                                    fontSize: 14, fontFamily: 'Poppins'),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
                               ),
                               const SizedBox(
                                 height: 4,
@@ -358,13 +258,14 @@ class _HomeState extends State<Home> {
                               ),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(100, 30),
+                                    minimumSize: const Size(120, 30),
                                     backgroundColor: Colors.orange,
                                   ),
                                   onPressed: () {},
-                                  child: const Text(
+                                  child: Text(
                                     'Voir plus',
-                                    style: TextStyle(color: Colors.white),
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.white),
                                   )),
                             ],
                           ),
@@ -377,7 +278,7 @@ class _HomeState extends State<Home> {
                     child: InkWell(
                       onTap: () {},
                       child: Container(
-                        width: 180,
+                        width: 150,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: const Color.fromARGB(255, 228, 228, 228),
@@ -395,23 +296,24 @@ class _HomeState extends State<Home> {
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.asset(
                                       "assets/images/artisan.jpg",
-                                      height: 120,
+                                      height: 100,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
                               ),
-                              const Text(
-                                "Ama KWATCHA",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Poppins'),
+                              Text(
+                                "DEH Kodzo",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              const Text(
-                                "Lomé - Agoe",
-                                style: TextStyle(
-                                    fontSize: 14, fontFamily: 'Poppins'),
+                              Text(
+                                "Lomé - Minamadou",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
                               ),
                               const SizedBox(
                                 height: 4,
@@ -431,13 +333,89 @@ class _HomeState extends State<Home> {
                               ),
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(100, 30),
+                                    minimumSize: const Size(120, 30),
                                     backgroundColor: Colors.orange,
                                   ),
                                   onPressed: () {},
-                                  child: const Text(
+                                  child: Text(
                                     'Voir plus',
-                                    style: TextStyle(color: Colors.white),
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.white),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, bottom: 20),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color.fromARGB(255, 228, 228, 228),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset(
+                                      "assets/images/7309681.jpg",
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Eugène LARE",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                "Lomé - Hedzanawoe",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              RatingBar.builder(
+                                initialRating: 4,
+                                minRating: 4,
+                                direction: Axis.horizontal,
+                                itemCount: 5,
+                                itemSize: 14,
+                                itemPadding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.orange),
+                                onRatingUpdate: (index) {},
+                              ),
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(120, 30),
+                                    backgroundColor: Colors.orange,
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    'Voir plus',
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.white),
                                   )),
                             ],
                           ),
@@ -508,6 +486,7 @@ class _AppBarState extends State<AppBar> {
     String searchTerm = searchController.text;
 
     if (searchTerm.isNotEmpty) {
+      print(searchTerm);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -515,6 +494,8 @@ class _AppBarState extends State<AppBar> {
         ),
       );
       searchController.clear();
+    } else {
+      print("searchTerm vide");
     }
   }
 

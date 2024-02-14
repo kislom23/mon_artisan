@@ -6,10 +6,14 @@ import 'package:nye_dowola/modules/auth/Login.dart';
 import 'package:nye_dowola/screens/home.dart';
 import 'package:nye_dowola/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_preview/device_preview.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(
+  DevicePreview(
+    enabled: true,
+    builder: (context) => const MyApp(), 
+  ),
+);
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key});
@@ -36,6 +40,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
       title: 'Nye Dowola',
       theme: ThemeData(
