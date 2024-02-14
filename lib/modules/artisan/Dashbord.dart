@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashbordPage extends StatefulWidget {
-  const DashbordPage({Key? key}) : super(key: key);
+  const DashbordPage({super.key});
 
   @override
   State<DashbordPage> createState() => _DashbordPageState();

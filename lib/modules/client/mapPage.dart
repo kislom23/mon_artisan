@@ -9,8 +9,7 @@ import 'package:map_location_picker/map_location_picker.dart';
 class MapPage extends StatefulWidget {
   final String artLon;
   final String artLat;
-  const MapPage({Key? key, required this.artLon, required this.artLat})
-      : super(key: key);
+  const MapPage({super.key, required this.artLon, required this.artLat});
 
   @override
   _MapPageState createState() => _MapPageState();

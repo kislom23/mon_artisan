@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
   final int id;
-  const EditProfilePage({Key? key, required this.id}) : super(key: key);
+  const EditProfilePage({super.key, required this.id});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();

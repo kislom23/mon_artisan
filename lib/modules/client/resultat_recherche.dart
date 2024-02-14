@@ -13,7 +13,7 @@ import 'package:nye_dowola/modules/client/artisanDetailsPage.dart';
 class ResultatPage extends StatefulWidget {
   final String searchTerm;
 
-  const ResultatPage({Key? key, required this.searchTerm}) : super(key: key);
+  const ResultatPage({super.key, required this.searchTerm});
 
   @override
   State<ResultatPage> createState() => _ResultatPageState();
@@ -32,10 +32,6 @@ class _ResultatPageState extends State<ResultatPage> {
 
   bool isLoading = true;
   Future<void> getLocationAndSearch() async {
-    setState(() {
-      // Ajouter cette ligne
-      isLoading = true;
-    });
     await checkLocationService();
     await search();
 
@@ -121,8 +117,7 @@ class _ResultatPageState extends State<ResultatPage> {
       return;
     }
 
-    final url =
-        Uri.parse('http://10.0.2.2:9000/api/v1/auth/offre-service/$searchTerm');
+    final url = Uri.parse('$urlServer/api/v1/auth/offre-service/$searchTerm');
 
     final response = await http.get(url);
 
@@ -191,8 +186,7 @@ class _ResultatPageState extends State<ResultatPage> {
     String term = searchController.text;
     print(term);
 
-    final url =
-        Uri.parse('$urlServer/api/v1/auth/offre-service/$term');
+    final url = Uri.parse('$urlServer/api/v1/auth/offre-service/$term');
 
     final response = await http.get(url);
 

@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../modules/auth/Login.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();

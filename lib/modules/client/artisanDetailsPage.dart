@@ -30,7 +30,7 @@ class DetailsPage extends StatefulWidget {
   final String longitude;
 
   const DetailsPage({
-    Key? key,
+    super.key,
     required this.nom,
     required this.prenom,
     required this.email,
@@ -42,7 +42,7 @@ class DetailsPage extends StatefulWidget {
     required this.prestationService,
     required this.latitude,
     required this.longitude,
-  }) : super(key: key);
+  });
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
